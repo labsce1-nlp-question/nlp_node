@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const request = require('request');
 
 // The port used for Express server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -24,6 +24,6 @@ request.post('https://slack.com/api/chat.postMessage', data, function (error, re
     });
 });
 
-app.listen(process.env.PORT || PORT, function() {
+app.listen( PORT, function() {
   console.log('Bot is listening on port ' + PORT);
 });
