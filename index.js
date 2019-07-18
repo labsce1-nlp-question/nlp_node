@@ -1,35 +1,29 @@
-const SlackBot = require('slackbots');
-const axios = require('axios');
+require('dotenv').config();
 
-require('dotenv').config()
+const express = require('express');
+// Creates express app
+const app = express();
+const bodyParser = require('body-parser');
+const request = require('request');
 
-const bot = new SlackBot({
-    token: process.env.BOT_TOKEN,
-    name: process.env.BOT_NAME
+// The port used for Express server
+const PORT = 3000;
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
+app.post('/', (req, res) => {
+var data = {
+  form: {
+      token: process.env.SLACK_AUTH_TOKEN,
+      channel: "#general",
+      text: "Hi! :wave: \n I'm your new bot."
+    }};
+request.post('https://slack.com/api/chat.postMessage', data, function (error, response, body) {
+      // Sends welcome message
+      res.json();
+    });
 });
 
-//Start Handler
-bot.on('start', () => {
-    const params = {
-        icon_emoji: ':smodibot:'
-    }
-
-    bot.postMessageToChannel('general', 'Ask @smodibot for a list of books', params)
+app.listen(process.env.PORT || PORT, function() {
+  console.log('Bot is listening on port ' + PORT);
 });
-
-//Error Handler
-bot.on('error', (err) => console.log(err));
-
-// Message Handler
-bot.on('message', (data) => {
-    if (data.type !== 'message') {
-        return;
-    }
-    handleMessage(data.text);
-})
-
-function handleMessage(message) {
-        console.log("Handled")
-    }
-
-
