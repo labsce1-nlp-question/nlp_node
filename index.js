@@ -23,7 +23,7 @@ app.post('/', (req, res) => {
                 form: {
                     token: process.env.SLACK_AUTH_TOKEN,
                     channel: req.body.channel_name,
-                    text: response.data.matches[0].data.URL,
+                    text: response.data.matches[0] ? response.data.matches[0].data.URL : 'No Results',
                 
                 }};
             request.post('https://slack.com/api/chat.postMessage', data, function (error, response, body) {
