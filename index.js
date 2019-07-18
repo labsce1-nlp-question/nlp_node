@@ -4,8 +4,8 @@ const axios = require('axios');
 require('dotenv').config()
 
 const bot = new SlackBot({
-    token: 'process.env.BOT_TOKEN',
-    name: 'process.env.BOT_NAME'
+    token: process.env.BOT_TOKEN,
+    name: process.env.BOT_NAME
 });
 
 //Start Handler
@@ -29,14 +29,7 @@ bot.on('message', (data) => {
 })
 
 function handleMessage(message) {
-    if(message.includes('<@ULES3CC68>')) {
-        const URL = `https://www.googleapis.com/books/v1/volumes?q=`
-        const searchTerm = message.slice(12);
-        // const bookList = ''
-
-        axios.get(`${URL}'${searchTerm}'`)
-            .then(res => const bookList = res.data.items)
-            .then(console.log(bookList))
+        console.log("Handled")
     }
-}
+
 
