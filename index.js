@@ -1,9 +1,11 @@
 const SlackBot = require('slackbots');
 const axios = require('axios');
 
+require('dotenv').config()
+
 const bot = new SlackBot({
-    token: 'xoxb-689534831568-694887420212-5gc7VO9WXbpmPBnYW5qQwrK0',
-    name: 'smodibot1'
+    token: 'process.env.BOT_TOKEN',
+    name: 'process.env.BOT_NAME'
 });
 
 //Start Handler
