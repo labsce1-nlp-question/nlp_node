@@ -11,8 +11,11 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const axios = require('axios');
 
+// Helpers
+const format = require('./helpers/format');
+
 // The port used for Express server
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -23,8 +26,10 @@ app.post('/', (req, res) => {
 
     axios.post("https://qa-api-alpha.herokuapp.com/qa", question)
         .then( response => {
-            const results = JSON.stringify([{pretext: response.data.matches[0].data.URL}]);
-            console.log(results)
+            const trimmed = format.trim(response.data.matches, 3);
+            const results = JSON.stringify([{pretext: trimmed}]);
+            console.log('results: ',results)
+            // console.log(response.data)
             var data = {
                 form: {
                     token: process.env.SLACK_AUTH_TOKEN,
@@ -46,6 +51,6 @@ app.post('/', (req, res) => {
         .catch( err => console.log(err));
 });
 
-app.listen(process.env.PORT || PORT, function() {
+app.listen( PORT, function() {
   console.log('Bot is listening on port ' + PORT);
 });
