@@ -1,3 +1,7 @@
+//For local testing use a tunnel program. For testing purposes i am using ngrok
+//start up ngrok with the command ngrok http 3000 in the shell terminal
+//use the url it provides for the test slackbot on the api.slack webapp
+
 require('dotenv').config();
 
 const express = require('express');
