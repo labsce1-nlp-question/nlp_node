@@ -32,15 +32,8 @@ app.post('/', (req, res) => {
                     channel: req.body.channel_name,
                     text: "Here's what I found ",
                     user: req.body.user_id
-                
-                }};
-            // var data = {
-            //     form: {
-            //         token: process.env.SLACK_AUTH_TOKEN,
-            //         channel: req.body.channel_name,
-            //         text: response.data.matches[0].data.URL,
-                
-            //     }};
+                }
+            };
             request.post('https://slack.com/api/chat.postEphemeral', data, function (error, response, body) {
                 // Sends welcome message
                 console.log(response.body)
@@ -51,7 +44,6 @@ app.post('/', (req, res) => {
             });
         })
         .catch( err => console.log(err));
-
 });
 
 app.listen(process.env.PORT || PORT, function() {
