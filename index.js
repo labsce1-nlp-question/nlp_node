@@ -12,6 +12,7 @@ const format = require('./helpers/format');
 
 // The port used for Express server
 const PORT = process.env.PORT || 3000;
+const SEARCH_URL = process.env.SEARCH_URL || "https://nlp-question.herokuapp.com/"
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -20,7 +21,7 @@ app.post('/', (req, res) => {
 
     const question = { question: req.body.text };
 
-    axios.post("https://qa-api-alpha.herokuapp.com/qa", question)
+    axios.post(`${SEARCH_URL}qa`, question)
         .then( response => {
           const trimmed = format.trim(response.data.matches, 3);
           // console.log(response.data)
