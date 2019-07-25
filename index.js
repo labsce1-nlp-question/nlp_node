@@ -10,7 +10,10 @@ const axios = require('axios');
 // Helpers
 const format = require('./helpers/format');
 
-// The port used for Express server
+// Database
+const db = require('./data/dbConfig')
+
+// Env Vars used for Express server
 const PORT = process.env.PORT || 3000;
 const SEARCH_URL = process.env.SEARCH_URL || "https://nlp-question.herokuapp.com/"
 
