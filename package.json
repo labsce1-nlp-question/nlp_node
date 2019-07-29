@@ -7,7 +7,9 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "tunnel": "ngrok http 3000",
-    "test": "jest --verbose"
+    "test": "jest --verbose",
+    "rollback": "npx knex migrate:rollback",
+    "migrate": "npx knex migrate:latest"
   },
   "author": "",
   "license": "ISC",
