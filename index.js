@@ -75,6 +75,33 @@ app.post("/bot", (req, res) => {
     .catch(err => console.log(err));
 });
 
+// Code for ephemeral
+// Converts the trimmed array into a JSON object, this is needed for the attachments object when sending a 
+// // Ephemeral through the slack API
+// const results = JSON.stringify([{pretext: trimmed}]);
+
+// //console.log('results: ',results)
+// //console.log(response.data.matches)
+
+// // For formating the object for the post request to the slack API please look here https://api.slack.com/docs/message-formatting
+// var data = {
+//     form: {
+//         token: process.env.SLACK_AUTH_TOKEN,
+//         attachments: results,
+//         channel: req.body.channel_name,
+//         text: "Here's what I found ",
+//         user: req.body.user_id
+//     }
+// };
+// request.post('https://slack.com/api/chat.postEphemeral', data, function (error, response, body) {
+//     // Sends welcome message
+//     console.log(response.body)
+//     if (error){
+//         console.log(error);
+//     }
+//     res.json();
+// });
+
 app.listen(PORT, function() {
   console.log("Bot is listening on port " + PORT);
 });
