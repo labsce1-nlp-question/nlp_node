@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 // ROUTE MIDDLEWARE
 app.use("/api/logs", logsRouter);
 
-app.post("/", (req, res) => {
+app.post("/bot", (req, res) => {
   //console.log(req.body);
 
   const question = { question: req.body.text };
@@ -74,26 +74,6 @@ app.post("/", (req, res) => {
     })
     .catch(err => console.log(err));
 });
-
-// app.get("/api/logs/requests", (req, res) => {
-//   const limit = req.query.limit || 20;
-//   const offset = req.query.offset || 0;
-
-//   db("test_log")
-//     .offset(offset)
-//     .limit(limit)
-//     .orderBy("time", "desc")
-//     .then(dbRes => {
-//       res.status(200).json(dbRes);
-//     })
-//     .catch(error => {
-//       const errObj = {
-//         error: error,
-//         message: error.message
-//       };
-//       console.log(json(errObj));
-//     });
-// });
 
 app.listen(PORT, function() {
   console.log("Bot is listening on port " + PORT);
