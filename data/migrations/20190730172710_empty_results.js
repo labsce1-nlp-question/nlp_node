@@ -9,5 +9,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schama.dropTableIfExists("empty_results");
+  return knex.schema.dropTableIfExists("empty_results");
 };
