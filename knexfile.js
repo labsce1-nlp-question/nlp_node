@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 DATABASE_URL = process.env.DATABASE_URL;
 DB_PASS = process.env.DB_PASS;
 DB_USER = process.env.DB_USER;
@@ -20,17 +20,15 @@ module.exports = {
     }
   },
 
-
   production: {
     client: "pg",
-    connection: {
-      host: DATABASE_URL
-    },
+    connection: DATABASE_URL,
     migrations: {
       directory: "./data/migrations"
     },
     seeds: {
       directory: "./data/seeds"
-    }
+    },
+    ssl: true
   }
 };
