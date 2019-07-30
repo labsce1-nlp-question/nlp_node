@@ -27,26 +27,8 @@ app.post('/', (req, res) => {
     axios.post("https://qa-api-alpha.herokuapp.com/qa", question)
         .then( response => {
             const trimmed = format.trim(response.data.matches, 3);
-            const results = JSON.stringify([{pretext: trimmed}]);
-            console.log('results: ',results)
-            // console.log(response.data)
-            var data = {
-                form: {
-                    token: process.env.SLACK_AUTH_TOKEN,
-                    attachments: results,
-                    channel: req.body.channel_name,
-                    text: "Here's what I found ",
-                    user: req.body.user_id
-                }
-            };
-            request.post('https://slack.com/api/chat.postEphemeral', data, function (error, response, body) {
-                // Sends welcome message
-                console.log(response.body)
-                if (error){
-                    console.log(error);
-                }
-                res.json();
-            });
+
+            
         })
         .catch( err => console.log(err));
 });
