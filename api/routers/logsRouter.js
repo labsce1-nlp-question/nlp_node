@@ -19,7 +19,7 @@ router.get("/requests", (req, res) => {
         error: error,
         message: error.message
       };
-      console.log(json(errObj));
+      console.log(JSON.stringify(errObj));
     });
 });
 
