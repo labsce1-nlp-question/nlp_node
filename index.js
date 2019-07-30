@@ -13,13 +13,21 @@ const format = require("./helpers/format");
 // Database
 const db = require("./data/dbConfig");
 
+// ROUTERS
+const logsRouter = require("./api/routers/logsRouter");
+
 // Env Vars used for Express server
 const PORT = process.env.PORT || 3000;
 const SEARCH_URL =
   process.env.SEARCH_URL || "https://nlp-question.herokuapp.com/";
 
+// MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// ROUTE MIDDLEWARE
+app.use("/api/logs", logsRouter);
+
 app.post("/", (req, res) => {
   //console.log(req.body);
 
@@ -67,25 +75,25 @@ app.post("/", (req, res) => {
     .catch(err => console.log(err));
 });
 
-app.get("/api/logs/requests", (req, res) => {
-  const limit = req.query.limit || 20;
-  const offset = req.query.offset || 0;
+// app.get("/api/logs/requests", (req, res) => {
+//   const limit = req.query.limit || 20;
+//   const offset = req.query.offset || 0;
 
-  db("test_log")
-    .offset(offset)
-    .limit(limit)
-    .orderBy("time", "desc")
-    .then(dbRes => {
-      res.status(200).json(dbRes);
-    })
-    .catch(error => {
-      const errObj = {
-        error: error,
-        message: error.message
-      };
-      console.log(json(errObj));
-    });
-});
+//   db("test_log")
+//     .offset(offset)
+//     .limit(limit)
+//     .orderBy("time", "desc")
+//     .then(dbRes => {
+//       res.status(200).json(dbRes);
+//     })
+//     .catch(error => {
+//       const errObj = {
+//         error: error,
+//         message: error.message
+//       };
+//       console.log(json(errObj));
+//     });
+// });
 
 app.listen(PORT, function() {
   console.log("Bot is listening on port " + PORT);
