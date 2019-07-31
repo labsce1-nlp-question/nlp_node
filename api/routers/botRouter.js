@@ -29,7 +29,10 @@ router.post("/", (req, res) => {
         .insert({ data: req.body, question: req.body.text })
         .then(dbRes => {
           console.log("LOGGED TO DB RES: ", dbRes);
-        });
+        })
+        .catch(err =>
+          console.log("ERROR: ", { error: err, message: err.message })
+        );
 
       var data = {
         form: {
