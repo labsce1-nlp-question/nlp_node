@@ -2,7 +2,7 @@ const router = require("express").Router();
 const db = require("../../data/dbConfig");
 
 // GET ALL LOGS
-// OPTIONALY QS: [limit, offset]
+// OPTIONAL QS: [limit, offset]
 router.get("/requests", (req, res) => {
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
@@ -19,7 +19,7 @@ router.get("/requests", (req, res) => {
         error: error,
         message: error.message
       };
-      console.log(json(errObj));
+      console.log(JSON.stringify(errObj));
     });
 });
 
