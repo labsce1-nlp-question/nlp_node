@@ -61,7 +61,7 @@ app.post("/bot", (req, res) => {
         .then(() => {
           // This sends an empty response to slack, letting slack know we have received the request 
           res.json();
-          //object used for sending back data to where the request came from. 
+          //object used for sending an ephemeral for receving feedback from the user
           var ephemeral = {
             response_type: "ephemeral",
             attachments: [
