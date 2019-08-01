@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../../data/dbConfig");
 const format = require("../../helpers/format");
+const log = require("../../helpers/log")
 const axios = require("axios");
 
 const SEARCH_URL =
@@ -15,9 +16,9 @@ router.post("/", (req, res) => {
   axios
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
-      // Temporary change to filter out duplicates
-      // OLD: const trimmed = format.trim(response.data.matches, 3);
-      // TEMP: const trimmed = format.trim(Array.from(new SET(response.data.matches)), 3);
+      if(response.data.matches.length === 0) {
+        log.noResult(req.body, req.body.text);
+      }
       const trimmed = format.trim((response.data.matches));
       const trimmedString = format.trimmedString(trimmed);
       // console.log(response.data)
