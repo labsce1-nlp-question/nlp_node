@@ -1,4 +1,3 @@
-
 exports.up = function(knex) {
   return knex.schema.createTable("test_log", log => {
     log.increments();
@@ -9,5 +8,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schama.dropTableIfExists("test_log");
+  return knex.schema.dropTableIfExists("test_log");
 };
