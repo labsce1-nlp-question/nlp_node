@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const db = require("../../data/dbConfig");
 const format = require("../../helpers/format");
-const log = require("../../helpers/log")
+const log = require("../../helpers/log");
 const axios = require("axios");
 
 const SEARCH_URL =
