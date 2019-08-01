@@ -21,3 +21,19 @@ exports.trimmedString = (arr) => {
   }
   return result;
 }
+
+exports.selectOptions = (arr, question) => {
+  let result = [];
+  for(let i = 0; i < arr.length; i++){
+    result.push({
+      text: `${i + 1}) ${arr[i].modName}`, 
+      value: JSON.stringify({
+        question: question,
+        search_res: arr,
+        positive_res: true
+      })
+    });
+  }
+  result.push({text: 'None', value: JSON.stringify({question: question, search_res: arr, positive_res: false})});
+  return result;
+}

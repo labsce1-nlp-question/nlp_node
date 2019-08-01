@@ -39,6 +39,8 @@ router.post("/", (req, res) => {
         .then(() => {
           // This sends an empty response to slack, letting slack know we have received the request 
           res.json();
+          // formats the trimmed array of result links along with the question asked into an array of objects
+          let selectOptions = format.selectOptions(trimmed, question.question);
           // Object used for sending an ephemeral for receving feedback from the user
           const ephemeral = {
             response_type: "ephemeral",
@@ -51,17 +53,8 @@ router.post("/", (req, res) => {
                     {
                       name: "Feedback",
                       type: "select",
-                      text: "Was this helpful?",
-                      options: [
-                        {
-                          text: "Yes",
-                          value: "True"
-                        },
-                        {
-                          text: "No",
-                          value: "False"
-                        }
-                      ]
+                      text: "Which link was helpful?",
+                      options: selectOptions
                     }
                   ]
                 }
