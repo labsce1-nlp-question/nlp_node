@@ -18,10 +18,8 @@ router.post("/", (req, res) => {
       // Temporary change to filter out duplicates
       // OLD: const trimmed = format.trim(response.data.matches, 3);
       // TEMP: const trimmed = format.trim(Array.from(new SET(response.data.matches)), 3);
-      const trimmed = format.trim(
-        Array.from(new Set(response.data.matches)),
-        3
-      );
+      const trimmed = format.trim((response.data.matches));
+      const trimmedString = format.trimmedString(trimmed);
       // console.log(response.data)
       db("test_log")
         .insert({ data: req.body, question: req.body.text })
@@ -32,7 +30,7 @@ router.post("/", (req, res) => {
       let data = {
           response_type:"in_channel",
           text: response.data.matches[0]
-            ? `${question.question}\n${trimmed}`
+            ? `${question.question}\n${trimmedString}`
             : "No Results"
       };
       // axios post request to the response_url provided when the user does a slash command and sends a request to this end-point
