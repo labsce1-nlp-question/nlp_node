@@ -29,7 +29,7 @@ router.post("/", (req, res) => {
           console.log("LOGGED TO DB RES: ", dbRes);
         });
 
-      var data = {
+      let data = {
           response_type:"in_channel",
           text: response.data.matches[0]
             ? `${question.question}\n${trimmed}`
@@ -42,7 +42,7 @@ router.post("/", (req, res) => {
           // This sends an empty response to slack, letting slack know we have received the request 
           res.json();
           // Object used for sending an ephemeral for receving feedback from the user
-          var ephemeral = {
+          const ephemeral = {
             response_type: "ephemeral",
             attachments: [
                 {
