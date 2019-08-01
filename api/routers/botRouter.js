@@ -81,6 +81,8 @@ router.post("/", (req, res) => {
 });
 
 // Feedback end-point SlackBot points to
+// Feedback helper use
+// log.feedback(question, bot_response, user_response, body)
 router.post("/feedback", (req, res) => {
   console.log("feedback received!", req.body);
 });
