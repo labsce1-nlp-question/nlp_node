@@ -16,6 +16,7 @@ router.post("/", (req, res) => {
   axios
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
+      // Log to 'empty_results' if no results
       if(response.data.matches.length === 0) {
         log.noResult(req.body, req.body.text);
       }
