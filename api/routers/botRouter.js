@@ -17,7 +17,7 @@ router.post("/", (req, res) => {
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
       // Log to 'empty_results' if no results
-      if(response.data === 0) {
+      if(response.data.length === 0) {
         log.noResult(req.body, req.body.text);
       }
       const trimmed = format.trim((response.data));
@@ -26,7 +26,7 @@ router.post("/", (req, res) => {
       db("test_log")
         .insert({ data: req.body, question: req.body.text })
         .then(dbRes => {
-          console.log("LOGGED TO DB RES: ", dbRes);
+          console.log("LOGGED RESPONSE");
         })
         .catch(err =>
           console.log("ERROR: ", { error: err, message: err.message })
