@@ -81,8 +81,8 @@ router.post("/feedback", (req, res) => {
   let value = JSON.parse(fb.actions[0].selected_options[0].value); 
   // console.log(req.body)
   // console.log("feedback received!\n", fb);
-  // console.log("feedback received!\n", value);
-  log.feedback(value.question, value.search_res, value.positive_res, fb);
+  console.log("feedback received!\n", value);
+  log.feedback(value.question, JSON.stringify(value.search_res), value.positive_res, fb);
 });
 
 module.exports = router;
