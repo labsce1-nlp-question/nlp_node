@@ -17,10 +17,10 @@ router.post("/", (req, res) => {
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
       // Log to 'empty_results' if no results
-      if(response.data.matches.length === 0) {
+      if(response.data === 0) {
         log.noResult(req.body, req.body.text);
       }
-      const trimmed = format.trim((response.data.matches));
+      const trimmed = format.trim((response.data));
       const trimmedString = format.trimmedString(trimmed);
       // console.log(response.data)
       db("test_log")
@@ -34,7 +34,7 @@ router.post("/", (req, res) => {
 
       let data = {
           response_type:"in_channel",
-          text: response.data.matches[0]
+          text: response.data[0]
             ? `${question.question}\n${trimmedString}`
             : "No Results"
       };
