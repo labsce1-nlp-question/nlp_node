@@ -77,7 +77,12 @@ router.post("/", (req, res) => {
 // Feedback helper use
 // log.feedback(question, bot_response, user_response, body)
 router.post("/feedback", (req, res) => {
-  console.log("feedback received!", req.body);
+  let fb = JSON.parse(req.body.payload); // string sent to this end-point after a user selects an option from the interactive message in slack
+  let value = JSON.parse(fb.actions[0].selected_options[0].value); 
+  // console.log(req.body)
+  // console.log("feedback received!\n", fb);
+  // console.log("feedback received!\n", value);
+  log.feedback(value.question, value.url_selected, value.positive_res, fb);
 });
 
 module.exports = router;

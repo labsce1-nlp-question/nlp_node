@@ -26,9 +26,10 @@ exports.selectOptions = (arr, question) => {
   let result = [];
   for(let i = 0; i < arr.length; i++){
     result.push({
-      text: `${i + 1}) ${arr[i].modName}`, 
+      text: `${i + 1}) ${arr[i].name}`, 
       value: JSON.stringify({
         question: question,
+        url_selected: arr[i],
         search_res: arr,
         positive_res: true
       })
