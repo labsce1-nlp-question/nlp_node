@@ -82,7 +82,7 @@ router.post("/feedback", (req, res) => {
   // console.log(req.body)
   // console.log("feedback received!\n", fb);
   // console.log("feedback received!\n", value);
-  log.feedback(value.question, value.url_selected, value.positive_res, fb);
+  log.feedback(value.question, value.search_res, value.positive_res, fb);
 });
 
 module.exports = router;
