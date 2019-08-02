@@ -79,10 +79,17 @@ router.post("/", (req, res) => {
 router.post("/feedback", (req, res) => {
   let fb = JSON.parse(req.body.payload); // string sent to this end-point after a user selects an option from the interactive message in slack
   let value = JSON.parse(fb.actions[0].selected_options[0].value); 
-  // console.log(req.body)
   // console.log("feedback received!\n", fb);
-  console.log("feedback received!\n", value);
+  // console.log("feedback received!\n", value);
   log.feedback(value.question, JSON.stringify(value.search_res), value.positive_res, fb);
+  
+  //Response object used to replace the interactive message that was sent to the user after they have submitted feedback that was logged
+  const response = {
+    response_type: "ephemeral",
+    replace_original: true,
+    text: "Thanks for your feedback!"
+  };
+  axios.post(fb.response_url, response).then(res => console.log(res.data)).catch(err => console.log(err));
 });
 
 module.exports = router;
