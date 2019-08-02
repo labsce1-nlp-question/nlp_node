@@ -9,7 +9,7 @@ exports.trim = (arr, limit = 3) => {
   // Otherwise construct the return statemtne
   let result = [];
   for (let i = 0; i < arr.length && i <= limit - 1; i++) {
-    result.push({modName: arr[i].modName, URL: arr[i].data.URL});
+    result.push({name: arr[i].name, URL: arr[i].URL});
   }
   return result;
 };
@@ -17,7 +17,7 @@ exports.trim = (arr, limit = 3) => {
 exports.trimmedString = (arr) => {
   let result = "";
   for(let i = 0; i < arr.length; i++) {
-    result += `${i + 1}) ${arr[i].modName}\n${arr[i].URL}\n`
+    result += `${i + 1}) ${arr[i].name}\n${arr[i].URL}\n`
   }
   return result;
 }

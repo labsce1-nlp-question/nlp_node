@@ -14,10 +14,12 @@
 
 ### ENDPOINTS
 
-| METHOD | URL                  | Description                  | Optional Queries      |
-| ------ | -------------------- | ---------------------------- | --------------------- |
-| POST   | `/`                  | Slack bot root functionality | none                  |
-| GET    | `/api/logs/requests` | Show request logs            | `?limit=20&offset=60` |
+| METHOD | URL                  | Description                           | Optional Queries      |
+| ------ | -------------------- | ------------------------------------- | --------------------- |
+| POST   | `/`                  | Slack bot root functionality          | none                  |
+| GET    | `/api/logs/requests` | Show request logs                     | `?limit=20&offset=60` |
+| GET    | `/api/logs/nores`    | Requests that we found no results for | `?limit=20&offset=60` |
+| GET    | `/api/logs/feedback` | Collection of bot user feedback       | `?limit=20&offset=60` |
 
 ---
 

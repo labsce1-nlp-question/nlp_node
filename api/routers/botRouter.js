@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const db = require("../../data/dbConfig");
 const format = require("../../helpers/format");
+const log = require("../../helpers/log");
 const axios = require("axios");
 
 const SEARCH_URL =
@@ -15,21 +16,25 @@ router.post("/", (req, res) => {
   axios
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
-      // Temporary change to filter out duplicates
-      // OLD: const trimmed = format.trim(response.data.matches, 3);
-      // TEMP: const trimmed = format.trim(Array.from(new SET(response.data.matches)), 3);
-      const trimmed = format.trim((response.data.matches));
+      // Log to 'empty_results' if no results
+      if(response.data.length === 0) {
+        log.noResult(req.body, req.body.text);
+      }
+      const trimmed = format.trim((response.data));
       const trimmedString = format.trimmedString(trimmed);
       // console.log(response.data)
       db("test_log")
         .insert({ data: req.body, question: req.body.text })
         .then(dbRes => {
-          console.log("LOGGED TO DB RES: ", dbRes);
-        });
+          console.log("LOGGED RESPONSE");
+        })
+        .catch(err =>
+          console.log("ERROR: ", { error: err, message: err.message })
+        );
 
       let data = {
           response_type:"in_channel",
-          text: response.data.matches[0]
+          text: response.data[0]
             ? `${question.question}\n${trimmedString}`
             : "No Results"
       };
@@ -69,6 +74,8 @@ router.post("/", (req, res) => {
 });
 
 // Feedback end-point SlackBot points to
+// Feedback helper use
+// log.feedback(question, bot_response, user_response, body)
 router.post("/feedback", (req, res) => {
   console.log("feedback received!", req.body);
 });
