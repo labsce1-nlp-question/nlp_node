@@ -44,6 +44,8 @@ router.post("/", (req, res) => {
         .then(() => {
           // This sends an empty response to slack, letting slack know we have received the request 
           res.json();
+          // formats the trimmed array of result links along with the question asked into an array of objects
+          let selectOptions = format.selectOptions(trimmed, question.question);
           // Object used for sending an ephemeral for receving feedback from the user
           const ephemeral = {
             response_type: "ephemeral",
@@ -56,17 +58,8 @@ router.post("/", (req, res) => {
                     {
                       name: "Feedback",
                       type: "select",
-                      text: "Was this helpful?",
-                      options: [
-                        {
-                          text: "Yes",
-                          value: "True"
-                        },
-                        {
-                          text: "No",
-                          value: "False"
-                        }
-                      ]
+                      text: "Which link was helpful?",
+                      options: selectOptions
                     }
                   ]
                 }
@@ -84,7 +77,19 @@ router.post("/", (req, res) => {
 // Feedback helper use
 // log.feedback(question, bot_response, user_response, body)
 router.post("/feedback", (req, res) => {
-  console.log("feedback received!", req.body);
+  let fb = JSON.parse(req.body.payload); // string sent to this end-point after a user selects an option from the interactive message in slack
+  let value = JSON.parse(fb.actions[0].selected_options[0].value); 
+  // console.log("feedback received!\n", fb);
+  // console.log("feedback received!\n", value);
+  log.feedback(value.question, JSON.stringify(value.search_res), value.positive_res, fb);
+  
+  //Response object used to replace the interactive message that was sent to the user after they have submitted feedback that was logged
+  const response = {
+    response_type: "ephemeral",
+    replace_original: true,
+    text: "Thanks for your feedback!"
+  };
+  axios.post(fb.response_url, response).then(res => console.log(res.data)).catch(err => console.log(err));
 });
 
 module.exports = router;
