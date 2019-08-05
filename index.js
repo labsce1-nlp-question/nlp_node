@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 // ROUTERS
 const logsRouter = require("./api/routers/logsRouter");
 const botRouter = require("./api/routers/botRouter");
+const usersRouter = require("./api/routers/usersRouter");
 
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 // ROUTE MIDDLEWARE
 app.use("/api/logs", logsRouter);
 app.use("/bot", botRouter);
+app.use("/users", usersRouter);
 
 app.listen(PORT, function() {
   console.log("Bot is listening on port " + PORT);
