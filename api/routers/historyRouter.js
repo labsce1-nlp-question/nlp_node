@@ -32,4 +32,14 @@ router.get("/all", (req, res) => {
     });
 });
 
+router.post("/", (req, res) => {
+  const { user_id, question, bot_response } = req.body;
+  db("user_history")
+    .insert({ user_id, question, bot_response })
+    .then(dbRes => {
+      res.status(201).json("OK");
+    })
+    .catch(error => console.log(error));
+});
+
 module.exports = router;

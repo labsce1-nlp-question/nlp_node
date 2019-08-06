@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use("/bot", botRouter);
 app.use("/api/logs", logsRouter);
 app.use("/api/users", usersRouter);
-app.use("/api/history");
+app.use("/api/history", historyRouter);
 
 app.listen(PORT, function() {
   console.log("Bot is listening on port " + PORT);
