@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const db = require("../../data/dbConfig");
 
 router.get("/all", (req, res) => {
   const limit = req.query.limit || 20;
@@ -34,6 +35,17 @@ router.get("/:id", (req, res) => {
       };
       console.log(JSON.stringify(errObj));
     });
+});
+
+router.post("/", (req, res) => {
+  const { slack_id, prefrences } = req.body;
+  console.log("USERS REQ.BODY: ", req.body);
+  db("users")
+    .insert(slack_id, prefrences)
+    .then(dbRes => {
+      return res.status(201).json("OK");
+    })
+    .catch(error => console.log(error));
 });
 
 module.exports = router;
