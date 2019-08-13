@@ -22,9 +22,9 @@ router.get("/all", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  const id = req.params.id;
+  const slack_id = req.params.id;
   db("users")
-    .where({ id })
+    .where({ slack_id })
     .then(dbRes => {
       res.status(200).json(dbRes);
     })
@@ -38,10 +38,10 @@ router.get("/:id", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  const { slack_id, prefrences } = req.body;
+  const { slack_id, preferences } = req.body;
   console.log("USERS REQ.BODY: ", req.body);
   db("users")
-    .insert(slack_id, prefrences)
+    .insert({ slack_id, preferences })
     .then(dbRes => {
       return res.status(201).json("OK");
     })
