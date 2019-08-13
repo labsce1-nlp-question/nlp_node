@@ -1,51 +1,40 @@
 const router = require("express").Router();
-const db = require("../../data/dbConfig");
+const usersDB = require("../../data/models/usersDB");
 
-router.get("/all", (req, res) => {
+router.get("/all", async (req, res) => {
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
 
-  db("users")
-    .offset(offset)
-    .limit(limit)
-    .orderBy("id", "desc")
-    .then(dbRes => {
-      res.status(200).json(dbRes);
-    })
-    .catch(error => {
-      const errObj = {
-        error: error,
-        message: error.message
-      };
-      console.log(JSON.stringify(errObj));
-    });
+  try {
+    const users = await usersDB.getUsers(offset, limit);
+
+    res.status(200).json(users);
+  } catch(err){
+    res.status(500).json({ error: `Unable to get Users: ${err}`})
+  }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   const slack_id = req.params.id;
-  db("users")
-    .where({ slack_id })
-    .then(dbRes => {
-      res.status(200).json(dbRes);
-    })
-    .catch(error => {
-      const errObj = {
-        error,
-        message: error.message
-      };
-      console.log(JSON.stringify(errObj));
-    });
+  try {
+    const user = await usersDB.getUserById(slack_id);
+
+    res.status(200).json(user);
+  } catch(err){
+    res.status(500).json({ error: `Unable to get the User: ${err}`});
+  }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { slack_id, preferences } = req.body;
-  console.log("USERS REQ.BODY: ", req.body);
-  db("users")
-    .insert({ slack_id, preferences })
-    .then(dbRes => {
-      return res.status(201).json("OK");
-    })
-    .catch(error => console.log(error));
+  
+  try {
+    const newUser = await usersDB.addUser(slack_id, preferences);
+
+    res.status(201).json(newUser);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to get the User: ${err}`});
+  }
 });
 
 module.exports = router;
