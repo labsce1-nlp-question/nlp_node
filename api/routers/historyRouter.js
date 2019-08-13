@@ -1,13 +1,11 @@
 const router = require("express").Router();
 const db = require("../../data/dbConfig");
 
-router.get("/:user_id", (req, res) => {
-  const user_id = req.params.user_id;
+router.get("/all", (req, res) => {
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
 
   db("user_history")
-    .where({ user_id })
     .offset(offset)
     .limit(limit)
     .then(dbRes => {
@@ -16,13 +14,16 @@ router.get("/:user_id", (req, res) => {
     .catch(error => {
       console.log({ error, message: error.message });
     });
+
 });
 
-router.get("/all", (req, res) => {
+router.get("/:user_id", (req, res) => {
+  const user_id = req.params.user_id;
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
 
   db("user_history")
+    .where({ user_id })
     .offset(offset)
     .limit(limit)
     .then(dbRes => {
