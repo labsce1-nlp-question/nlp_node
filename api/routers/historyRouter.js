@@ -1,47 +1,42 @@
 const router = require("express").Router();
-const db = require("../../data/dbConfig");
+const userhDB = require("../../data/models/userHistoryDB.js");
 
-router.get("/all", (req, res) => {
+router.get("/all", async (req, res) => {
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
 
-  db("user_history")
-    .offset(offset)
-    .limit(limit)
-    .then(dbRes => {
-      res.status(200).json(dbRes);
-    })
-    .catch(error => {
-      console.log({ error, message: error.message });
-    });
-
+  try {
+    const userHistory = await userhDB.getAllUserHistory(limit, offset);
+    
+    res.status(200).json(userHistory);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to get all User History: ${err}`});
+  }
 });
 
-router.get("/:user_id", (req, res) => {
+router.get("/:user_id", async (req, res) => {
   const user_id = req.params.user_id;
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
 
-  db("user_history")
-    .where({ user_id })
-    .offset(offset)
-    .limit(limit)
-    .then(dbRes => {
-      res.status(200).json(dbRes);
-    })
-    .catch(error => {
-      console.log({ error, message: error.message });
-    });
+  try {
+    const userH = await userhDB.getUserHistoryById(user_id, limit, offset);
+   
+    res.status(200).json(userH);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to get User history by id: ${err}`});
+  }
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const { user_id, question, bot_response } = req.body;
-  db("user_history")
-    .insert({ user_id, question, bot_response })
-    .then(dbRes => {
-      res.status(201).json("OK");
-    })
-    .catch(error => console.log(error));
+  try {
+    const userH = await userhDB.addUserHistory(user_id, question, bot_response);
+    
+    res.status(201).json(userH);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to add User History: ${err}`});
+  }
 });
 
 module.exports = router;
