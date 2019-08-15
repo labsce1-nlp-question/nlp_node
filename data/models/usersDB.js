@@ -9,7 +9,9 @@ const getUsers = (offset, limit) => {
 
 const getUserById = slack_id => {
   return db("users")
-    .where({ slack_id });
+    .where({ slack_id })
+    .first();
+    
 };
 
 const addUser = async (slack_id, preferences) => {

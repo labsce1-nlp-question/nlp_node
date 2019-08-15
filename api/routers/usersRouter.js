@@ -18,8 +18,11 @@ router.get("/:id", async (req, res) => {
   const slack_id = req.params.id;
   try {
     const user = await usersDB.getUserById(slack_id);
-
-    res.status(200).json(user);
+    if(user){
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ error: "User does not exist" });
+    }
   } catch(err){
     res.status(500).json({ error: `Unable to get the User: ${err}`});
   }

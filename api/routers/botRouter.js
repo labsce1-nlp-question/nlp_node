@@ -1,5 +1,6 @@
 const router = require("express").Router();
-const db = require("../../data/dbConfig");
+const userHistoryDB = require("../../data/models/userHistoryDB.js");
+const userDB = require("../../data/models/usersDB.js");
 const format = require("../../helpers/format");
 const log = require("../../helpers/log");
 const axios = require("axios");
@@ -8,10 +9,16 @@ const SEARCH_URL =
   process.env.SEARCH_URL || "https://nlp-question.herokuapp.com/";
 
 // MAIN BOT ROUTE
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
 
   const question = { question: req.body.text };
   console.log("BODY: ", req.body);
+  const userInDB = await userDB.getUserById(req.body.user_id);
+  
+  if(!userInDB){
+    userDB.addUser(req.body.user_id);
+    console.log("Added a user to the Database")
+  }
 
   axios
     .post(`${SEARCH_URL}qa`, question)
@@ -22,18 +29,12 @@ router.post("/", (req, res) => {
       }
       const trimmed = format.trim((response.data));
       const trimmedString = format.trimmedString(trimmed);
-      // console.log(response.data)
-      db("test_log")
-        .insert({ data: req.body, question: req.body.text })
-        .then(dbRes => {
-          console.log("LOGGED RESPONSE");
-        })
-        .catch(err =>
-          console.log("ERROR: ", { error: err, message: err.message })
-        );
+      
+      // Log users question and the Python api response to the database 
+      userHistoryDB.addUserHistory(req.body.user_id, req.body.text, JSON.stringify(trimmed));
 
       let data = {
-          response_type:"in_channel",
+          response_type:"ephemeral",
           text: response.data[0]
             ? `${question.question}\n${trimmedString}`
             : "No Results"
