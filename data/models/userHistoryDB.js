@@ -23,6 +23,7 @@ const addUserHistory = async (user_id, question, bot_response) => {
 
   return getUserHistoryById(user_id);
 };
+
 //Work in progress
 // const deleteHistory = async user_id => {
 //   // const remove = await db("user_history").where({ user_id }).orderBy("time").del();
