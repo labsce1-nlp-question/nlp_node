@@ -38,5 +38,17 @@ router.post("/", async (req, res) => {
     res.status(500).json({ error: `Unable to add User History: ${err}`});
   }
 });
+//Work in progress
+// router.delete("/:user_id", async (req, res) => {
+//   const { user_id } = req.params;
+
+//   try {
+//     const deleted = await userhDB.deleteHistory(user_id);
+
+//     res.status(200).json(deleted);
+//   } catch(err){
+//     res.status(500).json(err);
+//   }
+// })
 
 module.exports = router;
