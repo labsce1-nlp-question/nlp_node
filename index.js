@@ -13,6 +13,7 @@ const botRouter = require("./api/routers/botRouter");
 const logsRouter = require("./api/routers/logsRouter");
 const usersRouter = require("./api/routers/usersRouter");
 const historyRouter = require("./api/routers/historyRouter");
+const authRouter = require("./api/routers/authrouter.js");
 
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,6 +24,7 @@ app.use("/bot", botRouter);
 app.use("/api/logs", logsRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/history", historyRouter);
+app.use("/api/auth", authRouter);
 
 app.listen(PORT, function() {
   console.log("Bot is listening on port " + PORT);
