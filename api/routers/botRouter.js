@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
     userDB.addUser(req.body.user_id);
     console.log("Added a user to the Database")
   }
-
   axios
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
@@ -71,7 +70,7 @@ router.post("/", async (req, res) => {
         })
         .catch(err => console.log('error: ', err));
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log('error:',err));
 });
 
 // Feedback end-point SlackBot points to
