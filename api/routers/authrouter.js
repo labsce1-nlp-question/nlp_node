@@ -14,7 +14,12 @@ router.get('/redirect', async (req, res) => {
   if (reply.status !== 200) {
     res.send("Error encountered: \n"+JSON.stringify(reply.statusText)).status(200).end();
   } else {
-    res.send("Success!");
+    if(reply.data.user){
+      res.redirect(`http://localhost:3001/?id=${reply.data.user.id}`);
+      // res.status(200).json({ message: "User Authorized", user_id: reply.data.user.id });
+    } else {
+      res.send("Success!");
+    }
   }
 });
 
