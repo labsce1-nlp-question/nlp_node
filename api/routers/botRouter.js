@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
 
   const question = { question: req.body.text };
   console.log("BODY: ", req.body);
-  const userInDB = await userDB.getUserById(req.body.user_id);
+  const userInDB = await userDB.getUserBySlackId(req.body.user_id);
   
   if(!userInDB){
     userDB.addUser(req.body.user_id);

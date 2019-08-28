@@ -1,9 +1,10 @@
 const router = require("express").Router();
+const usersDB = require("../../data/models/usersDB.js");
 const axios = require("axios");
 
 
 router.get('/', (req, res) =>{
-  res.sendFile(__dirname +'/add-to-slack.html') //get this from slack, they'll make an html file for you
+  res.sendFile(__dirname +'/add-to-slack.html') 
 });
 
 router.get('/redirect', async (req, res) => {
@@ -15,7 +16,9 @@ router.get('/redirect', async (req, res) => {
     res.send("Error encountered: \n"+JSON.stringify(reply.statusText)).status(200).end();
   } else {
     if(reply.data.user){
-      res.redirect(`http://localhost:3001/?id=${reply.data.user.id}`);
+      const user_id = await usersDB.getUserBySlackId(reply.data.user.id);
+      res.redirect(`http://localhost:3001/slack-login/?${user_id.id}`);
+      // axios.post(`https://slack.com/api/auth.revoke?token=${reply.data.access_token}`);
       // res.status(200).json({ message: "User Authorized", user_id: reply.data.user.id });
     } else {
       res.send("Success!");
