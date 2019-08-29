@@ -1,9 +1,12 @@
 const router = require("express").Router();
 const axios = require("axios");
+const { generateToken } = require("../../helpers/middleware/authenticate.js");
+const usersDB = require("../../data/models/usersDB.js");
 
+const FrontEndUrl = process.env.FRONTEND_URL || 'http://localhost:3001';
 
 router.get('/', (req, res) =>{
-  res.sendFile(__dirname +'/add-to-slack.html') //get this from slack, they'll make an html file for you
+  res.sendFile(__dirname +'/add-to-slack.html') 
 });
 
 router.get('/redirect', async (req, res) => {
@@ -14,7 +17,21 @@ router.get('/redirect', async (req, res) => {
   if (reply.status !== 200) {
     res.send("Error encountered: \n"+JSON.stringify(reply.statusText)).status(200).end();
   } else {
-    res.send("Success!");
+    if(reply.data.user){
+      const userInDB = await usersDB.getUserBySlackId(reply.data.user.id);
+
+      // check if user is in the Database already or not
+      if(!userInDB){
+        userDB.addUser(req.body.user_id);
+        console.log("Added a user to the Database")
+      }
+
+      const token = generateToken(reply.data.user.id);
+    
+      res.redirect(`${FrontEndUrl}/slack-login/?${token}`);
+    } else {
+      res.send("Success!");
+    }
   }
 });
 

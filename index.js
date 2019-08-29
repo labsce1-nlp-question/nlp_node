@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
+const helmet = require("helmet");
 // Creates express app
 const app = express();
 const bodyParser = require("body-parser");
@@ -18,6 +19,12 @@ const authRouter = require("./api/routers/authrouter.js");
 // MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(helmet()); // hides your tech stack from sniffers
+
+// Root url
+app.get('/', (req, res) => {
+  res.send("Server is running!");
+});
 
 // ROUTE MIDDLEWARE
 app.use("/bot", botRouter);

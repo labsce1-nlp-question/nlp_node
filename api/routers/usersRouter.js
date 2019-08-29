@@ -14,30 +14,20 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const slack_id = req.params.id;
-  try {
-    const user = await usersDB.getUserById(slack_id);
-    if(user){
-      res.status(200).json(user);
-    } else {
-      res.status(404).json({ error: "User does not exist" });
-    }
-  } catch(err){
-    res.status(500).json({ error: `Unable to get the User: ${err}`});
-  }
-});
+// Currently unneeded to be turned into a end-point for retriving the users preferences
 
-router.post("/", async (req, res) => {
-  const { slack_id, preferences } = req.body;
-  
-  try {
-    const newUser = await usersDB.addUser(slack_id, preferences);
-
-    res.status(201).json(newUser);
-  } catch(err) {
-    res.status(500).json({ error: `Unable to get the User: ${err}`});
-  }
-});
+// router.get("/:id", async (req, res) => {
+//   const slack_id = req.params.id;
+//   try {
+//     const user = await usersDB.getUserById(slack_id);
+//     if(user){
+//       res.status(200).json(user);
+//     } else {
+//       res.status(404).json({ error: "User does not exist" });
+//     }
+//   } catch(err){
+//     res.status(500).json({ error: `Unable to get the User: ${err}`});
+//   }
+// });
 
 module.exports = router;
