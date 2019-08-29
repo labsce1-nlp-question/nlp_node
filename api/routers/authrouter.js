@@ -17,10 +17,7 @@ router.get('/redirect', async (req, res) => {
     res.send("Error encountered: \n"+JSON.stringify(reply.statusText)).status(200).end();
   } else {
     if(reply.data.user){
-      const user_id = await usersDB.getUserBySlackId(reply.data.user.id);
-      res.redirect(`${FrontEndUrl}/slack-login/?${user_id.id}`);
-      // axios.post(`https://slack.com/api/auth.revoke?token=${reply.data.access_token}`);
-      // res.status(200).json({ message: "User Authorized", user_id: reply.data.user.id });
+      res.redirect(`${FrontEndUrl}/slack-login/?${reply.data.user.id}`);
     } else {
       res.send("Success!");
     }
