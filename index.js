@@ -21,6 +21,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(helmet()); // hides your tech stack from sniffers
 
+// Root url
+app.get('/', (req, res) => {
+  res.send("Server is running!");
+});
+
 // ROUTE MIDDLEWARE
 app.use("/bot", botRouter);
 app.use("/api/logs", logsRouter);
