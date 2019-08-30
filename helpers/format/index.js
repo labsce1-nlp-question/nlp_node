@@ -9,7 +9,7 @@ exports.trim = (arr, limit = 3) => {
   // Otherwise construct the return statemtne
   let result = [];
   for (let i = 0; i < arr.length && i <= limit - 1; i++) {
-    result.push({name: arr[i].name, URL: arr[i].URL});
+    result.push({id: arr[i].id, name: arr[i].name, URL: arr[i].URL, description: arr[i].description});
   }
   return result;
 };
