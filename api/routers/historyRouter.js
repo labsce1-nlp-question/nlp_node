@@ -32,20 +32,6 @@ router.get("/", authenticate, async (req, res) => {
   }
 });
 
-// Add search history to the specific user by their slack id
-router.post("/", authenticate, async (req, res) => {
-  const slack_id = req.decoded.subject;
-  const { question, bot_response } = req.body;
-
-  try {
-    const userH = await userhDB.addUserHistory(slack_id, question, bot_response);
-    
-    res.status(201).json(userH);
-  } catch(err) {
-    res.status(500).json({ error: `Unable to add User History: ${err}`});
-  }
-});
-
 //Work in progress
 // router.delete("/:user_id", async (req, res) => {
 //   const { user_id } = req.params;
