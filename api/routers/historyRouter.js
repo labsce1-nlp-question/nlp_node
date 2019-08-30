@@ -2,7 +2,7 @@ const router = require("express").Router();
 const userhDB = require("../../data/models/userHistoryDB.js");
 const { authenticate } = require('../../helpers/middleware/authenticate.js');
 
-// End-point used to GET all users history
+// End-point used to GET the history of all users in the Database
 
 // router.get("/all", async (req, res) => {
 //   const limit = req.query.limit || 20;
@@ -31,18 +31,5 @@ router.get("/", authenticate, async (req, res) => {
     res.status(500).json({ error: `Unable to get User history by id: ${err}`});
   }
 });
-
-//Work in progress
-// router.delete("/:user_id", async (req, res) => {
-//   const { user_id } = req.params;
-
-//   try {
-//     const deleted = await userhDB.deleteHistory(user_id);
-
-//     res.status(200).json(deleted);
-//   } catch(err){
-//     res.status(500).json(err);
-//   }
-// })
 
 module.exports = router;

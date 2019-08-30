@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const usersDB = require("../../data/models/usersDB");
 
+// End-point not needed, keeping for testing of deployed backend sites
 router.get("/all", async (req, res) => {
   const limit = req.query.limit || 20;
   const offset = req.query.offset || 0;
