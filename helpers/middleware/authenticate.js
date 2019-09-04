@@ -11,7 +11,7 @@ function authenticate(req, res, next) {
   
   if (token) {
     jwt.verify(token, jwtKey, (err, decoded) => {
-      if (err) return res.status(401).json({error: err});
+      if (err) return res.status(401).json({ message: 'Your token has expired. Please sign in.', error: err });
       
       req.decoded = decoded;
       
