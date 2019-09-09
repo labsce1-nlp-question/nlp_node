@@ -31,7 +31,7 @@ function generateToken(slack_id) {
   };
 
   const options = {
-    expiresIn: '1h'
+    expiresIn: '2w'
   };
 
   return jwt.sign(payload, jwtKey, options)
