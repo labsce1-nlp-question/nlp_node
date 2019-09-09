@@ -24,6 +24,12 @@ const updateUserHistoryWithNote = (id, notes) => {
   return db("user_history")
     .where({ id })
     .update({ notes });
+};
+
+const deleteUserHistoryNote = id => {
+  return db("user_history")
+    .where({ id })
+    .update({ notes: null });
 }
 
 // const deleteHistory = async () => {
@@ -38,5 +44,6 @@ module.exports = {
   getAllUserHistory,
   getUserHistoryById,
   addUserHistory,
-  updateUserHistoryWithNote
+  updateUserHistoryWithNote,
+  deleteUserHistoryNote
 };

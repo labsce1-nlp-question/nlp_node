@@ -32,6 +32,7 @@ router.get("/", authenticate, async (req, res) => {
   }
 });
 
+// Add a note to a question that a user asked
 router.put("/add-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const { notes } = req.body;
@@ -42,6 +43,19 @@ router.put("/add-note/:id", authenticate, async (req, res) => {
     res.status(200).json(addNote);
   } catch (err) {
     res.status(500).json({ error: `Unable to add the note to the users history: ${err}`});
+  }
+});
+
+// Delete a users note from their user history
+router.put("/delete-note/:id", authenticate, async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const deleteNote = await userhDB.deleteUserHistoryNote(id);
+
+    res.status(200).json(deleteNote);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to delete the users note: ${err}` });
   }
 });
 
