@@ -15,24 +15,28 @@ const getUserHistoryById = (user_id, limit = 20, offset = 0)=> {
 };
 
 const addUserHistory = async (user_id, question, bot_response) => {
-  const [ count ] = await db("user_history").where({ user_id }).count();
-  // if(count.count >= 50){
-  //   deleteHistory(user_id);
-  // }
   await db("user_history").insert({ user_id, question, bot_response });
 
   return getUserHistoryById(user_id);
 };
-//Work in progress
-// const deleteHistory = async user_id => {
-//   // const remove = await db("user_history").where({ user_id }).orderBy("time").del();
-//   const remove = await db.raw(`DELETE FROM user_history WHERE user_id='${user_id}' IN (SELECT user_id='${user_id}' FROM user_history ORDER BY time LIMIT 1)`);
+
+const updateUserHistoryWithNote = (id, notes) => {
+  return db("user_history")
+    .where({ id })
+    .update({ notes });
+}
+
+// const deleteHistory = async () => {
+//   // grabs all records that are more than 2 weeks old and deletes them
+//   const remove = await db("user_history").whereRaw("time <= now() - ('2 WEEK'::INTERVAL)").del();
 //   console.log(remove)
-//   return remove
+  
+//   return null
 // }
 
 module.exports = {
   getAllUserHistory,
   getUserHistoryById,
   addUserHistory,
+  updateUserHistoryWithNote
 };

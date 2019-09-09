@@ -25,10 +25,23 @@ router.get("/", authenticate, async (req, res) => {
 
   try {
     const userH = await userhDB.getUserHistoryById(slack_id, limit, offset);
-   
+
     res.status(200).json(userH);
   } catch(err) {
     res.status(500).json({ error: `Unable to get User history by id: ${err}`});
+  }
+});
+
+router.put("/add-note/:id", authenticate, async (req, res) => {
+  const id = req.params.id;
+  const { notes } = req.body;
+
+  try {
+    const addNote = await userhDB.updateUserHistoryWithNote(id, notes);
+
+    res.status(200).json(addNote);
+  } catch (err) {
+    res.status(500).json({ error: `Unable to add the note to the users history: ${err}`});
   }
 });
 

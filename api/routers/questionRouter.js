@@ -26,9 +26,9 @@ router.post("/", authenticate, async (req, res) => {
         const trimmed = format.trim(response.data, 5);
         
         // Log users question and the Python api response to the database 
-        userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(trimmed));
+        const user_history = userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(trimmed));
 
-        res.status(200).json(trimmed);
+        res.status(200).json({ trimmed, user_history });
       }
     })
     .catch(err => res.status(500).json({ message: `Unable to ask the question: ${err}` }));
