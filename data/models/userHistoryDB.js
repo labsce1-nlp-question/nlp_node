@@ -17,7 +17,7 @@ const getUserHistoryById = (user_id, limit = 20, offset = 0)=> {
 const addUserHistory = async (user_id, question, bot_response) => {
   await db("user_history").insert({ user_id, question, bot_response });
 
-  return getUserHistoryById(user_id);
+  return getUserHistoryById(user_id, 10);
 };
 
 const updateUserHistoryWithNote = (id, notes) => {

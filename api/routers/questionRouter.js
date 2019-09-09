@@ -8,12 +8,12 @@ const { authenticate } = require('../../helpers/middleware/authenticate.js');
 const SEARCH_URL =
   process.env.SEARCH_URL || "https://nlp-question.herokuapp.com";
 
-router.post("/", authenticate, async (req, res) => {
+router.post("/", authenticate, (req, res) => {
   const question = { question: req.body.question };
 
   axios
     .post(`${SEARCH_URL}/qa`, question)
-    .then(response => {
+    .then(async response => {
 
       if(response.data.length == 0) {
         const data = {...req.body, user_id: req.decoded.subject };
@@ -26,7 +26,7 @@ router.post("/", authenticate, async (req, res) => {
         const trimmed = format.trim(response.data, 5);
         
         // Log users question and the Python api response to the database 
-        const user_history = userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(trimmed));
+        const user_history = await userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(trimmed));
 
         res.status(200).json({ trimmed, user_history });
       }
