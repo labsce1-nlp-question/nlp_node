@@ -2,7 +2,7 @@ const router = require("express").Router();
 const userhDB = require("../../data/models/userHistoryDB.js");
 const { authenticate } = require('../../helpers/middleware/authenticate.js');
 
-// End-point used to GET all users history
+// End-point used to GET the history of all users in the Database
 
 // router.get("/all", async (req, res) => {
 //   const limit = req.query.limit || 20;
@@ -25,38 +25,38 @@ router.get("/", authenticate, async (req, res) => {
 
   try {
     const userH = await userhDB.getUserHistoryById(slack_id, limit, offset);
-   
+
     res.status(200).json(userH);
   } catch(err) {
     res.status(500).json({ error: `Unable to get User history by id: ${err}`});
   }
 });
 
-// Add search history to the specific user by their slack id
-router.post("/", authenticate, async (req, res) => {
-  const slack_id = req.decoded.subject;
-  const { question, bot_response } = req.body;
+// Add a note to a question that a user asked
+router.put("/add-note/:id", authenticate, async (req, res) => {
+  const id = req.params.id;
+  const { notes } = req.body;
 
   try {
-    const userH = await userhDB.addUserHistory(slack_id, question, bot_response);
-    
-    res.status(201).json(userH);
-  } catch(err) {
-    res.status(500).json({ error: `Unable to add User History: ${err}`});
+    const addNote = await userhDB.updateUserHistoryWithNote(id, notes);
+
+    res.status(200).json(addNote);
+  } catch (err) {
+    res.status(500).json({ error: `Unable to add the note to the users history: ${err}`});
   }
 });
 
-//Work in progress
-// router.delete("/:user_id", async (req, res) => {
-//   const { user_id } = req.params;
+// Delete a users note from their user history
+router.put("/delete-note/:id", authenticate, async (req, res) => {
+  const id = req.params.id;
 
-//   try {
-//     const deleted = await userhDB.deleteHistory(user_id);
+  try {
+    const deleteNote = await userhDB.deleteUserHistoryNote(id);
 
-//     res.status(200).json(deleted);
-//   } catch(err){
-//     res.status(500).json(err);
-//   }
-// })
+    res.status(200).json(deleteNote);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to delete the users note: ${err}` });
+  }
+});
 
 module.exports = router;
