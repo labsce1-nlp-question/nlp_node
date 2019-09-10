@@ -46,10 +46,10 @@ router.get("/:id", authenticate, async (req, res) => {
 });
 
 // Add a note to a question that a user asked
-router.put("/add-note/:id", authenticate, async (req, res) => {
+router.put("/update-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const { notes } = req.body;
-
+  
   try {
     const addNote = await userhDB.updateUserHistoryWithNote(id, notes);
 
