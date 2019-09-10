@@ -32,6 +32,19 @@ router.get("/", authenticate, async (req, res) => {
   }
 });
 
+// GET a search history by it's ID in the Database
+router.get("/:id", authenticate, async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const history = await userhDB.getHistoryById(id);
+
+    res.status(200).json(history);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to get history by id: ${err}`});
+  }
+});
+
 // Add a note to a question that a user asked
 router.put("/add-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
