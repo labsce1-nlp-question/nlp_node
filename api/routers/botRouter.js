@@ -23,11 +23,12 @@ router.post("/", slack_verification, async (req, res) => {
   axios
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
+      console.log(response.data)
       // Log to 'empty_results' if no results
       if(response.data.length === 0) {
         log.noResult(req.body, req.body.text);
       }
-      const trimmed = format.trim((response.data));
+      const trimmed = response.data.match.length > 3 ? format.trim((response.data)) : response.data.match;
       const trimmedString = format.trimmedString(trimmed);
       
       // Log users question and the Python api response to the database 
