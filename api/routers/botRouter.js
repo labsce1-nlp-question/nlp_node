@@ -23,7 +23,7 @@ router.post("/", slack_verification, async (req, res) => {
   axios
     .post(`${SEARCH_URL}qa`, question)
     .then(response => {
-      console.log(response.data)
+      // console.log(response.data)
       // Log to 'empty_results' if no results
       if(response.data.length === 0) {
         log.noResult(req.body, req.body.text);
@@ -36,7 +36,7 @@ router.post("/", slack_verification, async (req, res) => {
 
       let data = {
           response_type:"ephemeral",
-          text: response.data[0]
+          text: response.data.match
             ? `${question.question}\n${trimmedString}`
             : "No Results"
       };
@@ -47,7 +47,7 @@ router.post("/", slack_verification, async (req, res) => {
           // This sends an empty response to slack, letting slack know we have received the request 
           res.json();
           // formats the trimmed array of result links along with the question asked into an array of objects
-          let selectOptions = format.selectOptions(trimmed, question.question);
+          let selectOptions = format.selectOptions(trimmed, question.question, response.data.match_type, response.data.similarity_metrics);
           // Object used for sending an ephemeral for receving feedback from the user
           const ephemeral = {
             response_type: "ephemeral",
@@ -83,7 +83,7 @@ router.post("/feedback", slack_verification, (req, res) => {
     let value = JSON.parse(fb.actions[0].selected_options[0].value); 
     // console.log("feedback received!\n", fb);
     // console.log("feedback received!\n", value);
-    log.feedback(value.question, JSON.stringify(value.search_res), value.positive_res, fb);
+    log.feedback(value.question, JSON.stringify(value.search_res), value.positive_res, fb, value.match_type, value.similarity_metrics);
     
     //Response object used to replace the interactive message that was sent to the user after they have submitted feedback that was logged
     const response = {
