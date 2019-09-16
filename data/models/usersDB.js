@@ -7,7 +7,12 @@ const getUsers = (offset, limit) => {
     .orderBy("id", "desc")
 };
 
-const getUserById = slack_id => {
+const getUserById = id => {
+  return db("users")
+    .where({ id })
+    .first();
+}
+const getUserBySlackId = slack_id => {
   return db("users")
     .where({ slack_id })
     .first();
@@ -23,6 +28,7 @@ const addUser = async (slack_id, preferences) => {
 
 module.exports = {
   getUsers,
+  getUserBySlackId,
   getUserById,
   addUser
 };
