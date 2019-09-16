@@ -6,13 +6,19 @@ const getAllUserHistory = (limit, offset) => {
   .limit(limit);
 };
 
-const getUserHistoryById = (user_id, limit = 20, offset = 0)=> {
+const getUserHistoryById = (user_id, limit = 20, offset = 0) => {
   return db("user_history")
     .where({ user_id })
     .offset(offset)
     .limit(limit)
     .orderBy("time", "desc");
 };
+
+const getHistoryById = id => {
+  return db("user_history")
+    .where({ id })
+    .first();
+}
 
 const addUserHistory = async (user_id, question, bot_response) => {
   await db("user_history").insert({ user_id, question, bot_response });
@@ -45,5 +51,6 @@ module.exports = {
   getUserHistoryById,
   addUserHistory,
   updateUserHistoryWithNote,
-  deleteUserHistoryNote
+  deleteUserHistoryNote,
+  getHistoryById
 };

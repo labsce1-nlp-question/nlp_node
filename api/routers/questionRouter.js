@@ -14,7 +14,7 @@ router.post("/", authenticate, (req, res) => {
   axios
     .post(`${SEARCH_URL}/qa`, question)
     .then(async response => {
-
+      console.log(response.data)
       if(response.data.length == 0) {
         const data = {...req.body, user_id: req.decoded.subject };
 
@@ -23,12 +23,12 @@ router.post("/", authenticate, (req, res) => {
         res.status(200).json({ message: "No results found" });
       } else {
         // trim the results from the python api
-        const trimmed = format.trim(response.data, 5);
+        // const trimmed = format.trim(response.data., 5);
         
         // Log users question and the Python api response to the database 
-        const user_history = await userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(trimmed));
+        const user_history = await userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(response.data.match));
 
-        res.status(200).json({ trimmed, user_history });
+        res.status(200).json({ response: response.data.match, user_history });
       }
     })
     .catch(err => res.status(500).json({ message: `Unable to ask the question: ${err}` }));
