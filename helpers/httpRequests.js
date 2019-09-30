@@ -7,7 +7,7 @@ const SendQuestion = question => {
   return axios
     .post(`${SEARCH_URL}qa`, question)
     .then(res => {
-      // console.log("ran");
+      // console.log(res.data);
       if(res.data.match.length === 0){
         return -1;
       } else {
