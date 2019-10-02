@@ -26,10 +26,13 @@ const addUserHistory = async (user_id, question, bot_response) => {
   return getUserHistoryById(user_id, 10);
 };
 
-const updateUserHistoryWithNote = (id, notes) => {
+const updateUserHistoryWithNote = (id, notes, title) => {
+  // Create a timestamp expressed in seconds.
+  const time_updated_at = Math.floor(Date.now() / 1000);
+
   return db("user_history")
     .where({ id })
-    .update({ notes });
+    .update({ title, notes, time_updated_at });
 };
 
 const deleteUserHistoryNote = id => {

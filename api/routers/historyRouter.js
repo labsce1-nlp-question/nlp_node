@@ -48,10 +48,10 @@ router.get("/:id", authenticate, async (req, res) => {
 // Add a note to a question that a user asked
 router.put("/update-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
-  const { notes } = req.body;
+  const { notes, title } = req.body;
   
   try {
-    const addNote = await userhDB.updateUserHistoryWithNote(id, notes);
+    const addNote = await userhDB.updateUserHistoryWithNote(id, notes, title);
 
     res.status(200).json(addNote);
   } catch (err) {

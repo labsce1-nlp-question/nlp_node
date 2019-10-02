@@ -17,10 +17,8 @@ router.post("/", slack_verification, async (req, res) => {
     
     const userInDB = await userDB.getUserBySlackId(req.body.user_id);
     
-    if(!userInDB){
-      userDB.addUser(req.body.user_id);
-      console.log("Added a user to the Database")
-    }
+    // Add user to database if they are not already added
+    if(!userInDB) userDB.addUser(req.body.user_id);
 
     // This sends an empty response to slack, letting slack know we have received the request 
     res.status(200).json();
@@ -30,7 +28,7 @@ router.post("/", slack_verification, async (req, res) => {
 
 
     // Log to 'empty_results' if no results
-    if(results === -1) {
+    if(results.match.length === 0) {
       log.noResult(req.body, req.body.text);
     }
 
@@ -43,14 +41,7 @@ router.post("/", slack_verification, async (req, res) => {
     // axios post request to the response_url provided when the user does a slash command and sends a request to this end-point
     // using the response_url allows us to send back a response to the users channel even if it is private
     // ---- SLACK WEB HOOK CALL ------
-    axios
-      .post(req.body.response_url, data)
-      .then(response => {
-        console.log(response.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    axios.post(req.body.response_url, data).then(response => {console.log(response.data);}).catch(err => {console.log(err);});
 
   } catch(err){
     console.log(err);
@@ -74,6 +65,7 @@ router.post("/feedback", slack_verification, (req, res) => {
       replace_original: true,
       text: "Thanks for your feedback!"
     };
+
     axios.post(fb.response_url, response).then(res => console.log(res.data)).catch(err => console.log(err));  
 });
 

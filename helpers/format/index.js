@@ -57,9 +57,9 @@ const selectOptions = (arr, question, match_type, sim_metric) => {
 
 const SlackDataObject = (results, question) => {
   // convert the data from the python api into a string to be sent to slack
-  const resultsString = results != -1 ? trimmedString(results.match): null;
+  const resultsString = results.match.length != 0 ? trimmedString(results.match): null;
   // formats the trimmed array of result links along with the question asked into an array of objects
-  const options = results != -1 ? selectOptions(results.match, question, results.match_type, results.similarity_metrics): null;
+  const options = results.match.length != 0 ? selectOptions(results.match, question, results.match_type, results.similarity_metrics): null;
 
   const data = {
     response_type:"ephemeral",

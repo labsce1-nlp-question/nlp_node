@@ -8,11 +8,7 @@ const SendQuestion = question => {
     .post(`${SEARCH_URL}qa`, question)
     .then(res => {
       // console.log(res.data);
-      if(res.data.match.length === 0){
-        return -1;
-      } else {
-        return res.data;
-      }
+      return res.data;
     })
     .catch(err => console.log('python api error: ',err));
 };
