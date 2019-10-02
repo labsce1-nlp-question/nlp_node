@@ -46,12 +46,10 @@ const updateUserHistoryWithNote = async (id, slack_id, notes, title) => {
   if(user_history === -1){
     return -1;
   } else {
-    // Create a timestamp expressed in seconds.
-    const time_updated_at = Math.floor(Date.now() / 1000);
-  
     return db("user_history")
       .where({ id })
-      .update({ title, notes, time_updated_at });
+      .update({ title, notes })
+      .update("time_updated_at", db.fn.now());
   }
 };
 
