@@ -32,13 +32,27 @@ router.get("/", authenticate, async (req, res) => {
   }
 });
 
+// Grab all of a user's notes by their slack id
+router.get("/notes", authenticate, async (req, res) => {
+  const slack_id = req.decoded.subject;
+
+  try {
+    const userNotes = await userhDB.getUserNotes(slack_id);
+
+    res.status(200).json(userNotes);
+  } catch(err) {
+    res.status(500).json({ error: `Unable to get the user's notes: ${err}`});
+  }
+});
+
 // GET a search history by it's ID in the Database
 router.get("/:id", authenticate, async (req, res) => {
   const id = req.params.id;
+  const slack_id = req.decoded.subject;
 
   try {
-    const history = await userhDB.getHistoryById(id);
-
+    const history = await userhDB.getHistoryById(id, slack_id);
+    
     res.status(200).json(history);
   } catch(err) {
     res.status(500).json({ error: `Unable to get history by id: ${err}`});
@@ -48,10 +62,11 @@ router.get("/:id", authenticate, async (req, res) => {
 // Add a note to a question that a user asked
 router.put("/update-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
+  const slack_id = req.decoded.subject;
   const { notes, title } = req.body;
   
   try {
-    const addNote = await userhDB.updateUserHistoryWithNote(id, notes, title);
+    const addNote = await userhDB.updateUserHistoryWithNote(id, slack_id, notes, title);
 
     res.status(200).json(addNote);
   } catch (err) {
@@ -59,12 +74,14 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
   }
 });
 
+
 // Delete a users note from their user history
 router.put("/delete-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
+  const slack_id = req.decoded.subject;
 
   try {
-    const deleteNote = await userhDB.deleteUserHistoryNote(id);
+    const deleteNote = await userhDB.deleteUserHistoryNote(id, slack_id);
 
     res.status(200).json(deleteNote);
   } catch(err) {
