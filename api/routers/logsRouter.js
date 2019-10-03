@@ -67,4 +67,24 @@ router.get("/feedback", (req, res) => {
     });
 });
 
+router.get("/errors", (req, res) => {
+  const limit = req.query.limit || 20;
+  const offset = req.query.offset || 0;
+
+  db("errors")
+    .offset(offset)
+    .limit(limit)
+    .orderBy("time", "desc")
+    .then(dbRes => {
+      res.status(200).json(dbRes);
+    })
+    .catch(error => {
+      const errObj = {
+        error: error,
+        message: error.message
+      };
+      console.log(JSON.stringify(errObj));
+    });
+});
+
 module.exports = router;

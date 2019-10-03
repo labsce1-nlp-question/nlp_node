@@ -6,6 +6,7 @@ const getAllUserHistory = (limit, offset) => {
   .limit(limit);
 };
 
+// get a user's history by their slack id
 const getUserHistoryById = (user_id, limit = 20, offset = 0) => {
   return db("user_history")
     .where({ user_id })
@@ -14,10 +15,19 @@ const getUserHistoryById = (user_id, limit = 20, offset = 0) => {
     .orderBy("time", "desc");
 };
 
-const getHistoryById = id => {
-  return db("user_history")
-    .where({ id })
-    .first();
+const getHistoryById = async (id, slack_id)=> {
+  const user_history = await db("user_history").where({ id }).first();
+  
+  // check to verify that the user requesting this data is the same
+  if(user_history){
+    if(user_history.user_id === slack_id){
+      return user_history;
+    } else {
+      return -1;
+    }
+  } else {
+    return user_history;
+  }
 }
 
 const addUserHistory = async (user_id, question, bot_response) => {
@@ -26,16 +36,37 @@ const addUserHistory = async (user_id, question, bot_response) => {
   return getUserHistoryById(user_id, 10);
 };
 
-const updateUserHistoryWithNote = (id, notes) => {
-  return db("user_history")
-    .where({ id })
-    .update({ notes });
+// get a users notes by their slack id, will only return a list of history they added notes to
+const getUserNotes = async user_id => {
+  const user_history = await db("user_history").where({ user_id }).orderBy("time", "desc");
+
+  return user_history.filter(history => history.notes);
 };
 
-const deleteUserHistoryNote = id => {
-  return db("user_history")
-    .where({ id })
-    .update({ notes: null });
+const updateUserHistoryWithNote = async (id, slack_id, notes, title) => {
+  // check to verify that the user requesting this data is the same
+  const user_history = await getHistoryById(id, slack_id);
+  
+  if(user_history === -1){
+    return -1;
+  } else {
+    return db("user_history")
+      .where({ id })
+      .update({ title, notes })
+      .update("time_updated_at", db.fn.now());
+  }
+};
+
+const deleteUserHistoryNote = async (id, slack_id) => {
+  const user_history = await getHistoryById(id, slack_id);
+
+  if(user_history === -1){
+    return -1;
+  } else {
+    return db("user_history")
+      .where({ id })
+      .update({ notes: null });
+  }
 }
 
 // const deleteHistory = async () => {
@@ -49,8 +80,9 @@ const deleteUserHistoryNote = id => {
 module.exports = {
   getAllUserHistory,
   getUserHistoryById,
+  getUserNotes,
+  getHistoryById,
   addUserHistory,
   updateUserHistoryWithNote,
-  deleteUserHistoryNote,
-  getHistoryById
+  deleteUserHistoryNote
 };
