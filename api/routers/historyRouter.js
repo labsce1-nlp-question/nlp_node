@@ -53,7 +53,11 @@ router.get("/:id", authenticate, async (req, res) => {
   try {
     const history = await userhDB.getHistoryById(id, slack_id);
     
-    res.status(200).json(history);
+    if(history != -1){
+      res.status(200).json(history);
+    } else {
+      res.status(400).json({ error: 'Invalid user account or this history does not exist'})
+    }
   } catch(err) {
     res.status(500).json({ error: `Unable to get history by id: ${err}`});
   }
@@ -64,14 +68,28 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const slack_id = req.decoded.subject;
   const { notes, title } = req.body;
-  
-  try {
-    const addNote = await userhDB.updateUserHistoryWithNote(id, slack_id, notes, title);
+ 
+  if(typeof notes === String && typeof title === String){
+    try {
+      const addNote = await userhDB.updateUserHistoryWithNote(id, slack_id, notes, title);
+      
+      if(addNote){
+        if(addNote != -1){
+          res.status(200).json(addNote);
+        } else {
+          res.status(400).json({ error: 'Invalid Slack Account' });
+        }
+      } else {
+        res.status(404).json({ error: 'History not found'});
+      }
 
-    res.status(200).json(addNote);
-  } catch (err) {
-    res.status(500).json({ error: `Unable to add the note to the users history: ${err}`});
+    } catch (err) {
+      res.status(500).json({ error: `Unable to add the note to the users history: ${err}`});
+    }
+  } else {
+    res.status(400).json({ error: 'Unable to update the Note, notes and title must be a string' });
   }
+  
 });
 
 

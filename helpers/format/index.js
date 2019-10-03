@@ -63,9 +63,9 @@ const SlackDataObject = (results, question) => {
 
   const data = {
     response_type:"ephemeral",
-    text: results != -1
-      ? `${question}\n${resultsString}`
-      : "No Results",
+    text: results.match.length != 0
+      ? `*Question: ${question}*\n${resultsString}`
+      : `*Question: ${question}*\nProduced no results please try asking a different question. I'll take note of this.`,
     attachments: [
       {
         fallback: "If you could read this message, you'd be choosing something fun to do right now.",

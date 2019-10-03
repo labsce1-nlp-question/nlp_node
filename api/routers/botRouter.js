@@ -11,7 +11,7 @@ const { SendQuestion } = require("../../helpers/httpRequests.js");
 router.post("/", slack_verification, async (req, res) => {
 
   const question = { question: req.body.text };
-  console.log("BODY: ", req.body);
+  // console.log(req.body, "BODY:");
   
   try {
     
@@ -22,10 +22,9 @@ router.post("/", slack_verification, async (req, res) => {
 
     // This sends an empty response to slack, letting slack know we have received the request 
     res.status(200).json();
-
+    
     // send question to the python api, await the promise to be resolved and create the data object for Slack
     const results = await SendQuestion(question);
-
 
     // Log to 'empty_results' if no results
     if(results.match.length === 0) {
@@ -41,10 +40,14 @@ router.post("/", slack_verification, async (req, res) => {
     // axios post request to the response_url provided when the user does a slash command and sends a request to this end-point
     // using the response_url allows us to send back a response to the users channel even if it is private
     // ---- SLACK WEB HOOK CALL ------
-    axios.post(req.body.response_url, data).then(response => {console.log(response.data);}).catch(err => {console.log(err);});
+    axios.post(req.body.response_url, data)
+      .then(response => {
+        // console.log("slack response:",response.data)
+      })
+      .catch(err => log.error(err, req.body));
 
   } catch(err){
-    console.log(err);
+    log.error(err, req.body);
   }
   
 });
@@ -55,8 +58,8 @@ router.post("/", slack_verification, async (req, res) => {
 router.post("/feedback", slack_verification, (req, res) => {
     let fb = JSON.parse(req.body.payload); // string sent to this end-point after a user selects an option from the interactive message in slack
     let value = JSON.parse(fb.actions[0].selected_options[0].value); 
-    // console.log("feedback received!\n", fb);
-    // console.log("feedback received!\n", value);
+    //console.log("feedback received!\n", fb);
+    //console.log("feedback received!\n", value);
     log.feedback(value.question, JSON.stringify(value.search_res), value.positive_res, fb, value.match_type, value.similarity_metrics);
     
     //Response object used to replace the interactive message that was sent to the user after they have submitted feedback that was logged
@@ -66,7 +69,11 @@ router.post("/feedback", slack_verification, (req, res) => {
       text: "Thanks for your feedback!"
     };
 
-    axios.post(fb.response_url, response).then(res => console.log(res.data)).catch(err => console.log(err));  
+    axios.post(fb.response_url, response)
+      .then(res => {
+        // console.log(res.data)
+      })
+      .catch(err => log.error(err, req.body));  
 });
 
 module.exports = router;

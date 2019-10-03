@@ -19,10 +19,14 @@ const getHistoryById = async (id, slack_id)=> {
   const user_history = await db("user_history").where({ id }).first();
   
   // check to verify that the user requesting this data is the same
-  if(user_history.user_id === slack_id){
-    return user_history;
+  if(user_history){
+    if(user_history.user_id === slack_id){
+      return user_history;
+    } else {
+      return -1;
+    }
   } else {
-    return -1;
+    return user_history;
   }
 }
 

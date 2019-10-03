@@ -10,7 +10,7 @@ const SendQuestion = question => {
       // console.log(res.data);
       return res.data;
     })
-    .catch(err => console.log('python api error: ',err));
+    .catch(err => DebugLog('python api error: ',err));
 };
 
 module.exports = {
