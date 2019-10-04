@@ -51,16 +51,23 @@ router.get("/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const slack_id = req.decoded.subject;
 
-  try {
-    const history = await userhDB.getHistoryById(id, slack_id);
-    
-    if(history != -1){
-      res.status(200).json(history);
-    } else {
-      res.status(400).json({ error: 'Invalid user account or this history does not exist'})
+  if(isNumeric(id) === false){
+    res.status(400).json({ error: 'The id must be a number' });
+  } else {
+    try {
+      const history = await userhDB.getHistoryById(id, slack_id);
+      
+      if(history){
+        res.status(200).json(history);
+      } else if(history === -1){
+        res.status(401).json({ error: 'Invalid user account'})
+      } else {
+        res.status(404).json({ error: 'History not found' });
+      }
+
+    } catch(err) {
+      res.status(500).json({ error: `Unable to get history by id: ${err}`});
     }
-  } catch(err) {
-    res.status(500).json({ error: `Unable to get history by id: ${err}`});
   }
 });
 
@@ -69,11 +76,15 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const slack_id = req.decoded.subject;
   const { notes, title } = req.body;
+  // Check if the body sent in the request has valid data based on what data types are schema is expecting
   const valid = ValidateData(req.body);
-
+  
+  // if valid is null this means there was an no body sent with the request or notes/title is missing in the body
   if(valid === null ){
-    res.status(400).json({ error: 'A body is required for this request. Please include a note or title' });
-  } else if(isNumeric(id) === false){
+    res.status(400).json({ error: 'A body is required for this request. Please include a notes or title' });
+    
+    // check if the param id is a number 
+  } else if(isNumeric(id) === false){ 
     res.status(400).json({ error: 'The id must be a number' });
   } else if(valid){
     try {
@@ -83,10 +94,10 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
         if(addNote != -1){
           res.status(200).json(addNote);
         } else {
-          res.status(400).json({ error: 'Invalid Slack Account' });
+          res.status(401).json({ error: 'Invalid Slack Account' });
         }
       } else {
-        res.status(404).json({ error: 'History not found'});
+        res.status(404).json({ error: 'History not found' });
       }
 
     } catch (err) {
@@ -104,12 +115,25 @@ router.put("/delete-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const slack_id = req.decoded.subject;
 
-  try {
-    const deleteNote = await userhDB.deleteUserHistoryNote(id, slack_id);
+  if(isNumeric(id) === false){
+    res.status(400).json({ error: 'The id must be a number' });
+  } else {
+    try {
+      const deleteNote = await userhDB.deleteUserHistoryNote(id, slack_id);
 
-    res.status(200).json(deleteNote);
-  } catch(err) {
-    res.status(500).json({ error: `Unable to delete the users note: ${err}` });
+      if(deleteNote){
+        if(deleteNote != -1){
+          res.status(200).json(deleteNote);
+        } else {
+          res.status(400).json({ error: 'Invalid Slack Account' });
+        }
+      } else {
+        res.status(404).json({ error: 'Note not found' });
+      }
+      
+    } catch(err) {
+      res.status(500).json({ error: `Unable to delete the users note: ${err}` });
+    }
   }
 });
 
