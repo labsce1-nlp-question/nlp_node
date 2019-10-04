@@ -22,7 +22,7 @@ const trim = (arr, limit = 3) => {
 const trimmedString = (arr) => {
   let result = "";
   for(let i = 0; i < arr.length; i++) {
-    result += `${i + 1}) ${arr[i].name}\n${arr[i].URL}\n`
+    result += `${arr[i].name}\n${arr[i].URL}\n\n`
   }
   return result;
 }
@@ -31,7 +31,7 @@ const selectOptions = (arr, question, match_type, sim_metric) => {
   let result = [];
   for(let i = 0; i < arr.length; i++){
     result.push({
-      text: `${i + 1}) ${arr[i].name}`, 
+      text: `${arr[i].name}`, 
       value: JSON.stringify({
         question: question,
         url_selected: arr[i],
