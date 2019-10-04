@@ -48,6 +48,7 @@ router.post("/", slack_verification, async (req, res) => {
 
   } catch(err){
     log.error(err, req.body);
+    res.status(500).json({ error: "Unable to make request to bot" });
   }
   
 });
