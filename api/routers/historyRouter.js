@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const userhDB = require("../../data/models/userHistoryDB.js");
-const { authenticate } = require('../../helpers/middleware/authenticate.js');
+const { authenticate } = require("../../helpers/middleware/authenticate.js");
+const { ValidateData, isNumeric } = require("../../helpers/ValidateData.js");
 
 // End-point used to GET the history of all users in the Database
 
@@ -68,8 +69,13 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const slack_id = req.decoded.subject;
   const { notes, title } = req.body;
- 
-  if(typeof notes === String && typeof title === String){
+  const valid = ValidateData(req.body);
+
+  if(valid === null ){
+    res.status(400).json({ error: 'A body is required for this request. Please include a note or title' });
+  } else if(isNumeric(id) === false){
+    res.status(400).json({ error: 'The id must be a number' });
+  } else if(valid){
     try {
       const addNote = await userhDB.updateUserHistoryWithNote(id, slack_id, notes, title);
       

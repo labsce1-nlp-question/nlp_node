@@ -53,7 +53,8 @@ const updateUserHistoryWithNote = async (id, slack_id, notes, title) => {
     return db("user_history")
       .where({ id })
       .update({ title, notes })
-      .update("time_updated_at", db.fn.now());
+      .update("time_updated_at", db.fn.now())
+      .then(() => getHistoryById(id, slack_id));
   }
 };
 

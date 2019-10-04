@@ -34,10 +34,10 @@ test("Checks SLACK_CLIENT_SECRET is set", () => {
   expect(SCSExists()).toBe(true);
 });
 
-// SLACK_VERIFICATION_TOKEN
-test("Checks SLACK_VERIFICATION_TOKEN is set", () => {
+// SLACK_SIGNING_SECRET
+test("Checks SLACK_SIGNING_SECRET is set", () => {
   const SVTExists = () => {
-    if (process.env.SLACK_VERIFICATION_TOKEN === undefined) {
+    if (process.env.SLACK_SIGNING_SECRET === undefined) {
       return false;
     }
     return true;
