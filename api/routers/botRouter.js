@@ -35,7 +35,7 @@ router.post("/", slack_verification, async (req, res) => {
     userHistoryDB.addUserHistory(req.body.user_id, req.body.text, JSON.stringify(results));
     
     // create a data object to be used to send to the Slack api
-    const data = await format.SlackDataObject(results, question.question);
+    const data = format.SlackDataObject(results, question.question);
     
     // axios post request to the response_url provided when the user does a slash command and sends a request to this end-point
     // using the response_url allows us to send back a response to the users channel even if it is private
@@ -44,7 +44,7 @@ router.post("/", slack_verification, async (req, res) => {
       .then(response => {
         // console.log("slack response:",response.data)
       })
-      .catch(err => console.log(err));
+      .catch(err => log.error(err, req.body));
 
   } catch(err){
     log.error(err, req.body);
