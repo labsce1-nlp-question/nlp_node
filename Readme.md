@@ -14,12 +14,18 @@
 
 ### ENDPOINTS
 
-| METHOD | URL                  | Description                           | Optional Queries      |
-| ------ | -------------------- | ------------------------------------- | --------------------- |
-| POST   | `/`                  | Slack bot root functionality          | none                  |
-| GET    | `/api/logs/requests` | Show request logs                     | `?limit=20&offset=60` |
-| GET    | `/api/logs/nores`    | Requests that we found no results for | `?limit=20&offset=60` |
-| GET    | `/api/logs/feedback` | Collection of bot user feedback       | `?limit=20&offset=60` |
+| METHOD | URL                            | Description                           | Optional Queries      |
+| ------ | ------------------------------ | ------------------------------------- | --------------------- |
+| POST   | `/bot/`                        | Slack bot root functionality          | none                  |
+| POST   | `/bot/feedback`                | Feedback end-point for slack bot      | none                  |
+| GET    | `/api/history/`                | Get a user's search history           | `?limit=20&offset=60` |
+| GET    | `/api/history/notes`           | List of the user's Notes              | `?limit=20&offset=60` |
+| GET    | `/api/history/:id`             | Get data on specific user history     | none                  |
+| PUT    | `/api/history/update-note/:id` | Update a search history with a note   | none                  |
+| PUT    | `/api/history/delete-note/:id` | Delete a search history's note        | none                  |
+| GET    | `/api/logs/requests`           | Show request logs                     | `?limit=20&offset=60` |
+| GET    | `/api/logs/nores`              | Requests that we found no results for | `?limit=20&offset=60` |
+| GET    | `/api/logs/feedback`           | Collection of bot user feedback       | `?limit=20&offset=60` |
 
 ---
 
@@ -32,9 +38,11 @@ The database connection to the production db connection is handled by Heroku, an
 SLACK_AUTH_TOKEN=
 SLACK_CLIENT_ID=
 SLACK_CLIENT_SECRET=
-SLACK_VERIFICATION_TOKEN=
+SLACK_SIGNING_SECRET=
+REDIRECT_URI=
 DATABASE_URL=
 DB_ENV=production
+JWT_SECRET=
 ```
 
 #### LOCAL
@@ -43,10 +51,12 @@ When you run a Postgres server locally you will need to include a user, and pass
 SLACK_AUTH_TOKEN=
 SLACK_CLIENT_ID=
 SLACK_CLIENT_SECRET=
-SLACK_VERIFICATION_TOKEN=
+SLACK_SIGNING_SECRET=
+REDIRECT_URI=
 DATABASE_URL=
 DB_ENV=development
 DB_PASS=
 DB_USER=
+JWT_SECRET=
 PORT=  optional - defaults to 3000
 ```
