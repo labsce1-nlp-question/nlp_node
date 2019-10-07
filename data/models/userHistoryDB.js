@@ -1,13 +1,13 @@
 const db = require("../dbConfig.js");
 
-const getAllUserHistory = (limit, offset) => {
+const getAllUserHistory = (limit = 30, offset = 0) => {
   return db("user_history")
   .offset(offset)
   .limit(limit);
 };
 
 // get a user's history by their slack id
-const getUserHistoryById = (user_id, limit = 20, offset = 0) => {
+const getUserHistoryById = (user_id, limit = 30, offset = 0) => {
   return db("user_history")
     .where({ user_id })
     .offset(offset)
@@ -30,18 +30,24 @@ const getHistoryById = async (id, slack_id)=> {
   }
 }
 
-const addUserHistory = async (user_id, question, bot_response) => {
-  await db("user_history").insert({ user_id, question, bot_response });
-
-  return getUserHistoryById(user_id, 10);
-};
-
 // get a users notes by their slack id, will only return a list of history they added notes to
-const getUserNotes = async user_id => {
-  const user_history = await db("user_history").where({ user_id }).orderBy("time", "desc");
+const getUserNotes = async ( user_id, limit = 30, offset = 0) => {
+
+  const user_history = await db("user_history")
+    .where({ user_id })
+    .offset(offset)
+    .limit(limit)
+    .orderBy("time", "desc");
 
   return user_history.filter(history => history.notes);
 };
+
+const addUserHistory = async (user_id, question, bot_response) => {
+  await db("user_history").insert({ user_id, question, bot_response });
+
+  return getUserHistoryById(user_id);
+};
+
 
 const updateUserHistoryWithNote = async (id, slack_id, notes, title) => {
   // check to verify that the user requesting this data is the same

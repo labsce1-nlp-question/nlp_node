@@ -2,18 +2,18 @@ const router = require("express").Router();
 const usersDB = require("../../data/models/usersDB");
 
 // End-point not needed, keeping for testing of deployed backend sites
-router.get("/all", async (req, res) => {
-  const limit = req.query.limit || 20;
-  const offset = req.query.offset || 0;
+// router.get("/all", async (req, res) => {
+//   const limit = req.query.limit || 20;
+//   const offset = req.query.offset || 0;
 
-  try {
-    const users = await usersDB.getUsers(offset, limit);
+//   try {
+//     const users = await usersDB.getUsers(offset, limit);
 
-    res.status(200).json(users);
-  } catch(err){
-    res.status(500).json({ error: `Unable to get Users: ${err}`})
-  }
-});
+//     res.status(200).json(users);
+//   } catch(err){
+//     res.status(500).json({ error: `Unable to get Users: ${err}`})
+//   }
+// });
 
 // Currently unneeded to be turned into a end-point for retriving the users preferences
 

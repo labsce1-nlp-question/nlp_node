@@ -21,8 +21,8 @@ const { ValidateData, isNumeric } = require("../../helpers/ValidateData.js");
 // GET a users history by their Slack ID
 router.get("/", authenticate, async (req, res) => {
   const slack_id = req.decoded.subject;
-  const limit = req.query.limit || 20;
-  const offset = req.query.offset || 0;
+  const limit = req.query.limit;
+  const offset = req.query.offset;
 
   try {
     const userH = await userhDB.getUserHistoryById(slack_id, limit, offset);
@@ -36,9 +36,11 @@ router.get("/", authenticate, async (req, res) => {
 // Grab all of a user's notes by their slack id
 router.get("/notes", authenticate, async (req, res) => {
   const slack_id = req.decoded.subject;
+  const limit = req.query.limit;
+  const offset = req.query.offset;
 
   try {
-    const userNotes = await userhDB.getUserNotes(slack_id);
+    const userNotes = await userhDB.getUserNotes(slack_id, limit, offset);
 
     res.status(200).json(userNotes);
   } catch(err) {
@@ -76,11 +78,12 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
   const id = req.params.id;
   const slack_id = req.decoded.subject;
   const { notes, title } = req.body;
+
   // Check if the body sent in the request has valid data based on what data types are schema is expecting
   const valid = ValidateData(req.body);
   
   // if valid is null this means there was an no body sent with the request or notes/title is missing in the body
-  if(valid === null ){
+  if(valid === null){
     res.status(400).json({ error: 'A body is required for this request. Please include a notes or title' });
     
     // check if the param id is a number 
