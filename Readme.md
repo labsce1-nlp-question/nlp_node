@@ -7,6 +7,25 @@
   > [Environments](#Environments)
 
 [End-Points](#End-Points)
+  >[Slack Bot End-Points](#Slack-Bot-API)<br/>
+    >1. [Slack Bot Main](#Slack-Bot-Main)
+    >2. [Slack Bot Feedback](#Slack-Bot-Feedback)
+
+  >[Search History End-Points](#Search-History-API)
+    >1. [GET History by User ID](#GET-History-by-User-ID)
+    >1. [GET History Notes by User ID](#GET-History-Notes-by-User-ID)
+    >1. [GET History by ID](#Get-history-by-id)
+    >1. [PUT Update History Note by ID](#put-update-hisotry-note-by-id)
+    >1. [DEL History Note by ID](#del-history-note-by-id)
+  
+  >[Question End-points](#Question-api)
+  
+  >[Logs End-points](#logs-api)
+    >1. [GET Request Logs](#get-request-logs)
+    >1. [GET No Result Logs](#get-no-result-logs)
+    >1. [GET Feedback logs](#get-feedback-logs)
+  
+  >[Auth End-points](#auth-api)
 
 ## Getting Started
 
@@ -58,21 +77,51 @@ PORT=  optional - defaults to 3000
 
 ## End-points
 
-### Slack Bot End-Points
-### History API
-### Question API
-### Logs API
-### Auth API
+### Slack Bot API
 
-| METHOD | URL                            | Description                           | Optional Queries      |
-| ------ | ------------------------------ | ------------------------------------- | --------------------- |
-| POST   | `/bot/`                        | Slack bot root functionality          | none                  |
-| POST   | `/bot/feedback`                | Feedback end-point for slack bot      | none                  |
-| GET    | `/api/history/`                | Get a user's search history           | `?limit=20&offset=60` |
-| GET    | `/api/history/notes`           | List of the user's Notes              | `?limit=20&offset=60` |
-| GET    | `/api/history/:id`             | Get data on specific user history     | none                  |
-| PUT    | `/api/history/update-note/:id` | Update a search history with a note   | none                  |
-| PUT    | `/api/history/delete-note/:id` | Delete a search history's note        | none                  |
-| GET    | `/api/logs/requests`           | Show request logs                     | `?limit=20&offset=60` |
-| GET    | `/api/logs/nores`              | Requests that we found no results for | `?limit=20&offset=60` |
-| GET    | `/api/logs/feedback`           | Collection of bot user feedback       | `?limit=20&offset=60` |
+| METHOD | URL              | Requires                     | Description                           | Optional Queries      |
+| ------ | ---------------- | :--------------------------: | ------------------------------------- | --------------------- |
+| POST   | `/bot/`          | `question`                   | Slack bot root functionality          | none                  |
+| POST   | `/bot/feedback`  | `slack interactive response` | Feedback end-point for slack bot      | none                  |
+
+### Slack Bot Main 
+### Slack Bot Feedback 
+
+---
+### Search History API
+
+| METHOD | URL                                    | Requires                                           | Description                           | Optional Queries      |
+| ------ | -------------------------------------- | :------------------------------------------------: | ------------------------------------- | --------------------- |
+| GET    | `/api/history/`                        | `Web Token`                                        | Get a user's search history           | `?limit=20&offset=60` |
+| GET    | `/api/history/notes`                   | `Web Token`                                        | List of the user's Notes              | `?limit=20&offset=60` |
+| GET    | `/api/history/:history_id`             | `Search History id` ,`Web Token`                   | Get data on specific user history     | none                  |
+| PUT    | `/api/history/update-note/:history_id` | `Search History id` ,`Web Token`, `notes`, `title` | Update a search history with a note   | none                  |
+| PUT    | `/api/history/delete-note/:history_id` | `Search History id` ,`Web Token`                   | Delete a search history's note        | none                  |
+
+### GET History by User ID
+### GET History Notes by User ID 
+### GET History by ID 
+### PUT Update History Note by ID
+### DEL History Note by ID
+
+---
+
+### Question API
+---
+
+### Logs API
+
+| METHOD | URL                            | Requires | Description                           | Optional Queries      |
+| ------ | ------------------------------ | :------: | ------------------------------------- | --------------------- |
+| GET    | `/api/logs/requests`           | `none`   | Show request logs                     | `?limit=20&offset=60` |
+| GET    | `/api/logs/nores`              | `none`   | Requests that we found no results for | `?limit=20&offset=60` |
+| GET    | `/api/logs/feedback`           | `none`   | Collection of bot user feedback       | `?limit=20&offset=60` |
+
+### GET Request Logs
+### GET No Result Logs
+### GET Feedback logs
+
+---
+
+### Auth API
+---
