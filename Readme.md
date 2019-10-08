@@ -1,8 +1,16 @@
-# TKBOT
+# TKBOT Node Back-End
 
-## Node Back End
+## Table of Contents
 
-### SCRIPTS
+[Getting Started](#Getting-Started)<br/>
+  > [Scripts](#Scripts)<br/> 
+  > [Environments](#Environments)
+
+[End-Points](#End-Points)
+
+## Getting Started
+
+### Scripts
 | CMD                | ACTION                                                                                                    |
 | ------------------ | --------------------------------------------------------------------------------------------------------- |
 | `npm start`        | Runs the server by default on port 3000                                                                   |
@@ -12,27 +20,12 @@
 | `npm run rollback` | Drops all tables in the connected Postgress server using `npx`                                            |
 | `npm run migrate`  | Runs migrations on all tables in the connected Postgress server using `npx`                               |
 
-### ENDPOINTS
-
-| METHOD | URL                            | Description                           | Optional Queries      |
-| ------ | ------------------------------ | ------------------------------------- | --------------------- |
-| POST   | `/bot/`                        | Slack bot root functionality          | none                  |
-| POST   | `/bot/feedback`                | Feedback end-point for slack bot      | none                  |
-| GET    | `/api/history/`                | Get a user's search history           | `?limit=20&offset=60` |
-| GET    | `/api/history/notes`           | List of the user's Notes              | `?limit=20&offset=60` |
-| GET    | `/api/history/:id`             | Get data on specific user history     | none                  |
-| PUT    | `/api/history/update-note/:id` | Update a search history with a note   | none                  |
-| PUT    | `/api/history/delete-note/:id` | Delete a search history's note        | none                  |
-| GET    | `/api/logs/requests`           | Show request logs                     | `?limit=20&offset=60` |
-| GET    | `/api/logs/nores`              | Requests that we found no results for | `?limit=20&offset=60` |
-| GET    | `/api/logs/feedback`           | Collection of bot user feedback       | `?limit=20&offset=60` |
-
 ---
 
-### ENVIRONMENT
+### Environments
 Both environments require you to make a slack bot in your workspace with a slash command pointed at the root endpoint. In the bot creation menu at `api.slack.com` you will find the `SLACK` secrets to store in your `.env` file.
 
-#### PRODUCTION
+#### Production
 The database connection to the production db connection is handled by Heroku, and the `DATABASE_URL` gets populated by Heroku when you provision one for the application.
 ```
 SLACK_AUTH_TOKEN=
@@ -45,7 +38,7 @@ DB_ENV=production
 JWT_SECRET=
 ```
 
-#### LOCAL
+#### Local
 When you run a Postgres server locally you will need to include a user, and password you set up while creating the local server.
 ```
 SLACK_AUTH_TOKEN=
@@ -60,3 +53,26 @@ DB_USER=
 JWT_SECRET=
 PORT=  optional - defaults to 3000
 ```
+
+---
+
+## End-points
+
+### Slack Bot End-Points
+### History API
+### Question API
+### Logs API
+### Auth API
+
+| METHOD | URL                            | Description                           | Optional Queries      |
+| ------ | ------------------------------ | ------------------------------------- | --------------------- |
+| POST   | `/bot/`                        | Slack bot root functionality          | none                  |
+| POST   | `/bot/feedback`                | Feedback end-point for slack bot      | none                  |
+| GET    | `/api/history/`                | Get a user's search history           | `?limit=20&offset=60` |
+| GET    | `/api/history/notes`           | List of the user's Notes              | `?limit=20&offset=60` |
+| GET    | `/api/history/:id`             | Get data on specific user history     | none                  |
+| PUT    | `/api/history/update-note/:id` | Update a search history with a note   | none                  |
+| PUT    | `/api/history/delete-note/:id` | Delete a search history's note        | none                  |
+| GET    | `/api/logs/requests`           | Show request logs                     | `?limit=20&offset=60` |
+| GET    | `/api/logs/nores`              | Requests that we found no results for | `?limit=20&offset=60` |
+| GET    | `/api/logs/feedback`           | Collection of bot user feedback       | `?limit=20&offset=60` |
