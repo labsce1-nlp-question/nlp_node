@@ -8,22 +8,22 @@
 
 [End-Points](#End-Points)
   >[Slack Bot End-Points](#Slack-Bot-API)<br/>
-  1. [Slack Bot Main](#Slack-Bot-Main)
-  2. [Slack Bot Feedback](#Slack-Bot-Feedback)
+  >1. [Slack Bot Main](#Slack-Bot-Main)
+  >2. [Slack Bot Feedback](#Slack-Bot-Feedback)
 
   >[Search History End-Points](#Search-History-API)
-  1. [GET History by User ID](#GET-History-by-User-ID)
-  1. [GET History Notes by User ID](#GET-History-Notes-by-User-ID)
-  1. [GET History by ID](#Get-history-by-id)
-  1. [PUT Update History Note by ID](#put-update-hisotry-note-by-id)
-  1. [DELETE History Note by ID](#delete-history-note-by-id)
+  >1. [GET History by User ID](#GET-History-by-User-ID)
+  >1. [GET History Notes by User ID](#GET-History-Notes-by-User-ID)
+  >1. [GET History by ID](#Get-history-by-id)
+  >1. [PUT Update History Note by ID](#put-update-hisotry-note-by-id)
+  >1. [DELETE History Note by ID](#delete-history-note-by-id)
   
   >[Question End-points](#Question-api)
   
   >[Logs End-points](#logs-api)
-  1. [GET Request Logs](#get-request-logs)
-  1. [GET No Result Logs](#get-no-result-logs)
-  1. [GET Feedback logs](#get-feedback-logs)
+  >1. [GET Request Logs](#get-request-logs)
+  >1. [GET No Result Logs](#get-no-result-logs)
+  >1. [GET Feedback logs](#get-feedback-logs)
   
   >[Auth End-points](#auth-api)
 
