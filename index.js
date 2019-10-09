@@ -35,7 +35,7 @@ app.use("/api/logs", logsRouter);
 app.use("/api/history", historyRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/question", questionRouter);
-// app.use("/api/users", usersRouter);
+app.use("/api/users", usersRouter);
 
 app.listen(PORT, function() {
   console.log("Bot is listening on port " + PORT);
