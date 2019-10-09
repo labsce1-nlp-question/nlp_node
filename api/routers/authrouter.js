@@ -20,7 +20,6 @@ router.get('/redirect', async (req, res) => {
     if(reply.data.user){
       const userInDB = await usersDB.getUserBySlackId(reply.data.user.id);
       
-      console.log(reply.data.user)
       // check if user is in the Database already or not
       if(!userInDB) usersDB.addUser(reply.data.user.id);
 

@@ -16,7 +16,7 @@
     >1. [GET History Notes by User ID](#GET-History-Notes-by-User-ID)
     >1. [GET History by ID](#Get-history-by-id)
     >1. [PUT Update History Note by ID](#put-update-hisotry-note-by-id)
-    >1. [DEL History Note by ID](#del-history-note-by-id)
+    >1. [DELETE History Note by ID](#delete-history-note-by-id)
   
   >[Question End-points](#Question-api)
   
@@ -85,7 +85,20 @@ PORT=  optional - defaults to 3000
 | POST   | `/bot/feedback`  | `slack interactive response` | Feedback end-point for slack bot      | none                  |
 
 ### Slack Bot Main 
+
+Method: **[POST]** `/bot/`
+
+On Success: Sends user a list of links from Training Kit as a whisper in the channel the did the slash command from on slack. This will also store the question the user asked in the postgres database.
+
+Note: This End-point should be where your slack app slash command points to. If a request comes from anywhere but slack the request will not go through.
+
 ### Slack Bot Feedback 
+
+Method: **[POST]** `/bot/feedback`
+
+On Success: Sends user a 'Thank you for your feedback!' message where the option select button was in the original slack message to the user. This will also log the feedback from the user to the postgres database.
+
+Note: This End-point should be where your slack app Interactive Message points to. 
 
 ---
 ### Search History API
@@ -96,26 +109,133 @@ PORT=  optional - defaults to 3000
 | GET    | `/api/history/notes`                   | `Web Token`                                        | List of the user's Notes              | `?limit=20&offset=60` |
 | GET    | `/api/history/:history_id`             | `Search History id` ,`Web Token`                   | Get data on specific user history     | none                  |
 | PUT    | `/api/history/update-note/:history_id` | `Search History id` ,`Web Token`, `notes`, `title` | Update a search history with a note   | none                  |
-| PUT    | `/api/history/delete-note/:history_id` | `Search History id` ,`Web Token`                   | Delete a search history's note        | none                  |
+| DELETE    | `/api/history/:history_id` | `Search History id` ,`Web Token`                   | Delete a search history's note        | none                  |
 
 ### GET History by User ID
+
+Method: **[GET]** `/api/history/`
+
+Expects header: 
+```Javascript
+{
+  Authorization: WebToken
+}
+```
+On Success: Returns a List of the Search History the user has made with the Slack Bot/Webapp
+```Javascript
+[]
+```
+
 ### GET History Notes by User ID 
+
+Method: **[GET]** `/api/history/notes/`
+
+Expects header: 
+```Javascript
+{
+  Authorization: WebToken
+}
+```
+
+On Success: Returns a List of Search History that have had **Notes** added to them
+```Javascript
+[]
+```
+
 ### GET History by ID 
+
+Method: **[GET]** `/api/history/:history_id`
+
+Expects header: 
+```Javascript
+{
+  Authorization: WebToken
+}
+```
+
+Parameters:
+
+| Name       | Type    | Required |
+| ---------- | ------- | -------- |
+| history_id | integer | yes      |
+
+On Success: Returns the Search History object 
+```Javascript
+{
+
+}
+```
+
 ### PUT Update History Note by ID
-### DEL History Note by ID
+
+Method: **[PUT]** `/api/history/update-note/:history_id`
+
+Expects header: 
+```Javascript
+{
+  Authorization: WebToken
+}
+```
+
+Parameters:
+
+| Name       | Type    | Required |
+| ---------- | ------- | -------- |
+| history_id | integer | yes      |
+
+Expects Body: 
+```Javascript
+{
+  title: string,
+  notes: string
+}
+```
+
+Note: The body expects either a title or notes. One of the other is required or you can send both.
+
+On Success: Returns the Search History object with the newly updated notes
+```Javascript
+{
+
+}
+```
+
+### DELETE History by ID
+
+Method: **[DELETE]** `/api/history/:history_id`
+
+Expects header: 
+```Javascript
+{
+  Authorization: WebToken
+}
+```
+
+Parameters:
+
+| Name       | Type    | Required |
+| ---------- | ------- | -------- |
+| history_id | integer | yes      |
+
+On Success: Deletes the Search History from the database
 
 ---
 
 ### Question API
+
+| METHOD  | URL                            | Requires     | Description                              | Optional Queries      |
+| ------- | ------------------------------ | :----------: | ---------------------------------------- | --------------------- |
+| POST    | `/api/question/`               | `question`   | Sends question from webapp to python API | `none`                |
+
 ---
 
 ### Logs API
 
 | METHOD | URL                            | Requires | Description                           | Optional Queries      |
 | ------ | ------------------------------ | :------: | ------------------------------------- | --------------------- |
-| GET    | `/api/logs/requests`           | `none`   | Show request logs                     | `?limit=20&offset=60` |
-| GET    | `/api/logs/nores`              | `none`   | Requests that we found no results for | `?limit=20&offset=60` |
-| GET    | `/api/logs/feedback`           | `none`   | Collection of bot user feedback       | `?limit=20&offset=60` |
+| GET    | `/api/logs/requests/`          | `none`   | Show request logs                     | `?limit=20&offset=60` |
+| GET    | `/api/logs/nores/`             | `none`   | Requests that we found no results for | `?limit=20&offset=60` |
+| GET    | `/api/logs/feedback/`          | `none`   | Collection of bot user feedback       | `?limit=20&offset=60` |
 
 ### GET Request Logs
 ### GET No Result Logs
@@ -124,4 +244,10 @@ PORT=  optional - defaults to 3000
 ---
 
 ### Auth API
+
+| METHOD | URL                   | Requires          | Description                                                                         | Optional Queries      |
+| ------ | ----------------------| :---------------: | ----------------------------------------------------------------------------------- | --------------------- |
+| GET    | `/api/auth/`          | `none`            | Add the slack bot to your workspace                                                 | `none`                |
+| GET    | `/api/auth/redirect/` | `slack request`   | End-point for slack bot to point to for interactive message/for logging into webapp | `none`                |
+
 ---

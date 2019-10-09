@@ -49,15 +49,15 @@ router.get("/notes", authenticate, async (req, res) => {
 });
 
 // GET a search history by it's ID in the Database
-router.get("/:id", authenticate, async (req, res) => {
-  const id = req.params.id;
+router.get("/:history_id", authenticate, async (req, res) => {
+  const history_id = req.params.history_id;
   const slack_id = req.decoded.subject;
 
   if(isNumeric(id) === false){
     res.status(400).json({ error: 'The id must be a number' });
   } else {
     try {
-      const history = await userhDB.getHistoryById(id, slack_id);
+      const history = await userhDB.getHistoryById(history_id, slack_id);
       
       if(history){
         res.status(200).json(history);
@@ -73,9 +73,9 @@ router.get("/:id", authenticate, async (req, res) => {
   }
 });
 
-// Add a note to a question that a user asked
-router.put("/update-note/:id", authenticate, async (req, res) => {
-  const id = req.params.id;
+// Add a note to a question that a user asked by it's id in the database
+router.put("/update-note/:history_id", authenticate, async (req, res) => {
+  const history_id = req.params.history_id;
   const slack_id = req.decoded.subject;
   const { notes, title } = req.body;
 
@@ -87,11 +87,11 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
     res.status(400).json({ error: 'A body is required for this request. Please include a notes or title' });
     
     // check if the param id is a number 
-  } else if(isNumeric(id) === false){ 
-    res.status(400).json({ error: 'The id must be a number' });
+  } else if(isNumeric(history_id) === false){ 
+    res.status(400).json({ error: 'The history_id must be a number' });
   } else if(valid){
     try {
-      const addNote = await userhDB.updateUserHistoryWithNote(id, slack_id, notes, title);
+      const addNote = await userhDB.updateUserHistoryWithNote(history_id, slack_id, notes, title);
       
       if(addNote){
         if(addNote != -1){
@@ -114,19 +114,19 @@ router.put("/update-note/:id", authenticate, async (req, res) => {
 
 
 // Delete a users note from their user history
-router.put("/delete-note/:id", authenticate, async (req, res) => {
-  const id = req.params.id;
+router.delete("/:history_id", authenticate, async (req, res) => {
+  const history_id = req.params.history_id;
   const slack_id = req.decoded.subject;
 
-  if(isNumeric(id) === false){
+  if(isNumeric(history_id) === false){
     res.status(400).json({ error: 'The id must be a number' });
   } else {
     try {
-      const deleteNote = await userhDB.deleteUserHistoryNote(id, slack_id);
+      const deleteNote = await userhDB.deleteUserHistory(history_id, slack_id);
 
       if(deleteNote){
         if(deleteNote != -1){
-          res.status(200).json(deleteNote);
+          res.status(200).json({ message: 'Search History deleted' });
         } else {
           res.status(400).json({ error: 'Invalid Slack Account' });
         }

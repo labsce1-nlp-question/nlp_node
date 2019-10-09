@@ -64,7 +64,7 @@ const updateUserHistoryWithNote = async (id, slack_id, notes, title) => {
   }
 };
 
-const deleteUserHistoryNote = async (id, slack_id) => {
+const deleteUserHistory = async (id, slack_id) => {
   const user_history = await getHistoryById(id, slack_id);
 
   if(user_history === -1){
@@ -72,7 +72,7 @@ const deleteUserHistoryNote = async (id, slack_id) => {
   } else {
     return db("user_history")
       .where({ id })
-      .update({ notes: null });
+      .del();
   }
 }
 
@@ -91,5 +91,5 @@ module.exports = {
   getHistoryById,
   addUserHistory,
   updateUserHistoryWithNote,
-  deleteUserHistoryNote
+  deleteUserHistory
 };
