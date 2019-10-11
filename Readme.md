@@ -111,8 +111,7 @@ Method: **[POST]** `/bot/`
 
 On Success: Sends user a list of links from Training Kit as a whisper in the channel the did the slash command from on slack. This will also store the question the user asked in the postgres database.
 
-Image example from slack here
-
+![alt text](https://i.imgur.com/dxxOYbP.png "example image")
 
 Note: This End-point should be where your slack app slash command points to. If a request comes from anywhere but slack the request will not go through.
 
@@ -122,7 +121,7 @@ Method: **[POST]** `/bot/feedback`
 
 On Success: Sends user a 'Thank you for your feedback!' message where the option select button was in the original slack message to the user. This will also log the feedback from the user to the postgres database.
 
-Image example from slack here
+![alt text](https://i.imgur.com/JtHnCip.png "example image")
 
 Note: This End-point should be where your slack app Interactive Message points to. 
 
