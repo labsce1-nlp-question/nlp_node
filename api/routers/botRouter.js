@@ -43,11 +43,20 @@ router.post("/", slack_verification, async (req, res) => {
     axios.post(req.body.response_url, data)
       .then(response => {
         // console.log("slack response:",response.data)
+        if(response.data === 'ok'){
+          const options = format.SlackSelectDataObject(results, question.question);
+          
+          // Sends the interactive message used to get user's feedback with a option selection
+          axios.post(req.body.response_url, options).catch(err => log.err(err, req.body))
+        } else {
+          log.error(err, req.body);
+        }
       })
       .catch(err => log.error(err, req.body));
 
   } catch(err){
     log.error(err, req.body);
+    res.status(500).json({ error: "Unable to make request to bot" });
   }
   
 });

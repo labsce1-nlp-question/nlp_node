@@ -22,7 +22,7 @@ function Slack_Verification_check(req, res, next){
     const request_sign = 'v0=' + crypto.createHmac('sha256', signing_secret).update(sign_base_string).digest('hex');
 
     // compare hashes using a constant time compare method from crypto library
-    if(crypto.timingSafeEqual(Buffer.from(slack_sign), Buffer.from(request_sign))){
+    if((slack_sign && request_sign) && crypto.timingSafeEqual(Buffer.from(slack_sign), Buffer.from(request_sign))){
       next();
     } else{
       return res.status(400).send('Request not verified');
