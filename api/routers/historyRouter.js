@@ -53,7 +53,7 @@ router.get("/:history_id", authenticate, async (req, res) => {
   const history_id = req.params.history_id;
   const slack_id = req.decoded.subject;
 
-  if(isNumeric(id) === false){
+  if(isNumeric(history_id) === false){
     res.status(400).json({ error: 'The id must be a number' });
   } else {
     try {

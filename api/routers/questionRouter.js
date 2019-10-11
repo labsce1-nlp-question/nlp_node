@@ -24,9 +24,9 @@ router.post("/", authenticate, async (req, res) => {
         res.status(200).json({ message: "No results found" });
       } else {        
         // Log users question and the Python api response to the database 
-        const user_history = await userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(results));
+        await userHistoryDB.addUserHistory(req.decoded.subject, req.body.question, JSON.stringify(results));
   
-        res.status(200).json({ response: results.match, user_history });
+        res.status(200).json(results.match);
       }
   
     } catch(err) {

@@ -7,12 +7,23 @@ const getAllUserHistory = (limit = 30, offset = 0) => {
 };
 
 // get a user's history by their slack id
-const getUserHistoryById = (user_id, limit = 30, offset = 0) => {
-  return db("user_history")
+const getUserHistoryById = async (user_id, limit = 30, offset = 0) => {
+  const user_history = await db("user_history")
     .where({ user_id })
     .offset(offset)
     .limit(limit)
     .orderBy("time", "desc");
+
+  // Uncomment if the need to remove the same question asked from the user's search history
+  // let res = [];
+  // for(let i = 0; i < user_history.length; i++){
+
+  //   if(i > 0 && user_history[i-1].question === user_history[i].question) continue;
+    
+  //   res.push(user_history[i]);
+  // }
+
+  return user_history;
 };
 
 const getHistoryById = async (id, slack_id)=> {
@@ -31,12 +42,10 @@ const getHistoryById = async (id, slack_id)=> {
 }
 
 // get a users notes by their slack id, will only return a list of history they added notes to
-const getUserNotes = async ( user_id, limit = 30, offset = 0) => {
+const getUserNotes = async user_id => {
 
   const user_history = await db("user_history")
     .where({ user_id })
-    .offset(offset)
-    .limit(limit)
     .orderBy("time", "desc");
 
   return user_history.filter(history => history.notes);
