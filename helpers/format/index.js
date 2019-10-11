@@ -58,14 +58,23 @@ const selectOptions = (arr, question, match_type, sim_metric) => {
 const SlackDataObject = (results, question) => {
   // convert the data from the python api into a string to be sent to slack
   const resultsString = results.match.length != 0 ? trimmedString(results.match): null;
-  // formats the trimmed array of result links along with the question asked into an array of objects
-  const options = results.match.length != 0 ? selectOptions(results.match, question, results.match_type, results.similarity_metrics): null;
 
   const data = {
     response_type:"ephemeral",
     text: results.match.length != 0
       ? `*Question: ${question}*\n\n${resultsString}`
-      : `*Question: ${question}*\n\nProduced no results please try asking a different question. I'll take note of this.`,
+      : `*Question: ${question}*\n\nProduced no results please try asking a different question. I'll take note of this.`
+  }
+
+  return data;
+}
+
+const SlackSelectDataObject = (results, question) => {
+  // formats the trimmed array of result links along with the question asked into an array of objects
+  const options = results.match.length != 0 ? selectOptions(results.match, question, results.match_type, results.similarity_metrics): null;
+
+  const data = {
+    response_type:"ephemeral",
     attachments: [
       {
         fallback: "If you could read this message, you'd be choosing something fun to do right now.",
@@ -91,5 +100,6 @@ module.exports = {
   trim,
   trimmedString,
   selectOptions,
-  SlackDataObject
+  SlackDataObject,
+  SlackSelectDataObject
 }
