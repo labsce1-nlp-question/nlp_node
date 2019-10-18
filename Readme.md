@@ -1,5 +1,11 @@
 # TK-BOT Node Back-End
 
+## Dev-Deployed server and Production server URLs
+
+Dev/staging server URL: https://lambda-tkbot.herokuapp.com/
+
+Prduction server URL: https://nlp-node.herokuapp.com/
+
 ## How to add TK-Bot to your Slack Workspace
 
 Looking to add this Slack bot to your workspace? [click here to add it](https://slack.com/oauth/authorize?client_id=689534831568.698834298644&scope=commands,bot)
