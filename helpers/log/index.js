@@ -13,3 +13,10 @@ exports.feedback = (question, bot_response, user_response, body, match_type, sim
     .then(res => console.log("LOGGED USER FEEDBACK"))
     .catch(err => console.log({err, message: err.message}))
 }
+
+exports.error = (error, body) => {
+  db('errors')
+    .insert({ error, body })
+    .then(res => console.log("LOGGED ERROR"))
+    .catch(err => console.log({err, message: err.message}));
+}

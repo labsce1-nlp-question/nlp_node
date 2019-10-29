@@ -22,13 +22,22 @@ const getUserBySlackId = slack_id => {
 const addUser = async (slack_id, preferences) => {
   await db("users").insert({ slack_id, preferences });
 
-  return getUserById(slack_id);
+  return getUserBySlackId(slack_id);
 };
 
+const deleteUserById = id => {
+  return db("users").where({ id }).del()
+};
+
+const deleteUserByslackId = slack_id => {
+  return db("users").where({ slack_id }).del()
+};
 
 module.exports = {
   getUsers,
   getUserBySlackId,
   getUserById,
-  addUser
+  addUser,
+  deleteUserById,
+  deleteUserByslackId
 };
