@@ -26,6 +26,7 @@ const getUserHistoryById = async (user_id, limit = 30, offset = 0) => {
   return user_history;
 };
 
+// get a specific history from the databse by it's database ID
 const getHistoryById = async (id, slack_id)=> {
   const user_history = await db("user_history").where({ id }).first();
   
@@ -52,9 +53,9 @@ const getUserNotes = async user_id => {
 };
 
 const addUserHistory = async (user_id, question, bot_response) => {
-  await db("user_history").insert({ user_id, question, bot_response });
-
-  return getUserHistoryById(user_id);
+  const [id] = await db("user_history").insert({ user_id, question, bot_response }, "id");
+  
+  return getHistoryById(id, user_id);
 };
 
 
@@ -79,9 +80,9 @@ const deleteUserHistory = async (id, slack_id) => {
   if(user_history === -1){
     return -1;
   } else {
-    return db("user_history")
-      .where({ id })
-      .del();
+    await db("user_history").where({ id }).del();
+
+    return getUserHistoryById(slack_id);
   }
 }
 

@@ -113,7 +113,7 @@ router.put("/update-note/:history_id", authenticate, async (req, res) => {
 });
 
 
-// Delete a users note from their user history
+// Delete a users search history from their user history
 router.delete("/:history_id", authenticate, async (req, res) => {
   const history_id = req.params.history_id;
   const slack_id = req.decoded.subject;
@@ -122,13 +122,13 @@ router.delete("/:history_id", authenticate, async (req, res) => {
     res.status(400).json({ error: 'The id must be a number' });
   } else {
     try {
-      const deleteNote = await userhDB.deleteUserHistory(history_id, slack_id);
+      const updated_history = await userhDB.deleteUserHistory(history_id, slack_id);
 
-      if(deleteNote){
-        if(deleteNote != -1){
-          res.status(200).json({ message: 'Search History deleted' });
+      if(updated_history){
+        if(updated_history != -1){
+          res.status(200).json({ message: 'Search History deleted', updated_history });
         } else {
-          res.status(400).json({ error: 'Invalid Slack Account' });
+          res.status(401).json({ error: 'Invalid Slack Account' });
         }
       } else {
         res.status(404).json({ error: 'Note not found' });
